@@ -1,0 +1,28 @@
+{
+    "name": "fixme/ordering",
+    "description": "package that wenables placing an order for deliver from multi-shops",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Samir Khattar",
+            "email": "samir.khattar@edayna.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+			"Fixme\\Ordering\\": "src/"
+        }
+	},
+	"minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fixme\\Ordering\\Providers\\OrderingServiceProvider"
+            ],
+            "aliases": {
+                "Ordering": "Fixme\\Ordering\\Facades\\Ordering"
+            }
+        }
+    }
+}
