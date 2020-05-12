@@ -31,7 +31,7 @@ class OrderRepository implements OrderRepositoryInterface
 		$orderModel->seller_type = $order->seller->retrieveClassType();
 		$orderModel->currency = $order->currency;
 		$orderModel->save();
-		$order->id = $orderModel->id;
+		$order->setId($orderModel->id);
 		$orderItems = $order->items->map(function($item) use ($orderModel) {
 			$orderItem = [
 				'order_id'    => $orderModel->id,
@@ -91,7 +91,10 @@ class OrderRepository implements OrderRepositoryInterface
     {
 		$itemsCollection = new ItemsCollection(
 			$orderModel->items->map(function($item) {
-				return new Item($item->quantity, $item->price, $item->description);
+				$itemEntity = new Item($item->quantity, $item->price, $item->description);
+				$itemEntity->setIdentifierValue($item->item_id);
+				$itemEntity->setClassType($item->item_type);
+				return $itemEntity;
 			})
 		);
 		$orderBuyer	= Buyer::clientCopy($orderModel->buyer);

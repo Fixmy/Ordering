@@ -13,7 +13,7 @@ class Order implements OrderContract
 	public $items;
 	public $addressInfo;
 	public $currency = 'USD';
-
+	private $id;
 	/**
 	 * Creates a new Order Class
 	 * 
@@ -26,11 +26,33 @@ class Order implements OrderContract
 		Buyer $buyer,
 		Seller $seller,
 		AddressInfo $addressInfo,
-		ItemsCollection $items
+		ItemsCollection $items,
+		int $id = null
 	) {
     	$this->buyer = $buyer;
     	$this->seller = $seller;
     	$this->items = $items;
     	$this->addressInfo = $addressInfo;
+    	$this->id = $id;
+    }
+
+    /**
+     *  returns the uniq identifier of a saved order
+     * 
+     * @return [type] [description]
+     */
+    public function getId(): int
+    {
+    	return $this->id;
+    }
+
+    /**
+     *  returns the uniq identifier of a saved order
+     * 
+     * @return [type] [description]
+     */
+    public function setId(int $id): void
+    {
+    	$this->id = $id;
     }
 }

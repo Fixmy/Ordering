@@ -38,9 +38,11 @@ class Ordering implements OrderingContract
 		// });
 		// $address     = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
 		// $result = $this->request($beneficiary, $shop, $address, ...$items);
-		//testing read;
-		$result = $this->getBuyerOrder($beneficiary, 7);
-		dd($result);
+
+		//testing read
+		$result = $this->getBuyerOrder($beneficiary, 13);
+		var_dump($result);
+		return $result;
 	}
 
 	public function request(
