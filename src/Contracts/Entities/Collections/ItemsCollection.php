@@ -9,5 +9,5 @@ interface ItemsCollection
 	 * 
 	 * @return float
 	 */
-	public function getTotalBill() : float;
+	public function getTotalBill(): float;
 }
