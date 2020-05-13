@@ -9,29 +9,28 @@ use App\Models\Items\Item;
 use App\Models\Shops\Shop;
 use App\Models\Users\Beneficiary;
 /**
- * Contracts
+ *  Contracts
  */
-use Fixme\Ordering\Contracts\Client\AddressInfo as AddressInfoContract;
-use Fixme\Ordering\Contracts\Client\Buyer as BuyerContract;
-use Fixme\Ordering\Contracts\Client\Item as ItemContract;
-use Fixme\Ordering\Contracts\Client\Seller as SellerContract;
 use Fixme\Ordering\Contracts\Ordering as OrderingContract;
+use Fixme\Ordering\Contracts\Client\Buyer as BuyerContract;
+use Fixme\Ordering\Contracts\Client\Seller as SellerContract;
+use Fixme\Ordering\Contracts\Client\Item as ItemContract;
+use Fixme\Ordering\Contracts\Client\AddressInfo as AddressInfoContract;
+/**
+ * Entities
+ */
+use Fixme\Ordering\Entities\Order;
+use Fixme\Ordering\Entities\Buyer;
+use Fixme\Ordering\Entities\AddressInfo;
+use Fixme\Ordering\Entities\OrderState;
+use Fixme\Ordering\Entities\Seller;
+use Fixme\Ordering\Entities\Collections\ItemsCollection;
+use Fixme\Ordering\Entities\Collections\OrdersCollection;
+use Fixme\Ordering\Entities\Values\Status;
 /**
  * Data
  */
 use Fixme\Ordering\Data\Repositories\OrderRepository;
-/**
- * Entities
- */
-use Fixme\Ordering\Entities\AddressInfo;
-use Fixme\Ordering\Entities\Buyer;
-use Fixme\Ordering\Entities\Collections\ItemsCollection;
-use Fixme\Ordering\Entities\Collections\OrdersCollection;
-use Fixme\Ordering\Entities\Order;
-use Fixme\Ordering\Entities\Seller;
-use Fixme\Ordering\Entities\Entities\OrderStatus;
-use Fixme\Ordering\Entities\Values\Status;
-
 
 class Ordering implements OrderingContract
 {	
@@ -44,7 +43,6 @@ class Ordering implements OrderingContract
 	{	
 		print('hello from ordering');
 		//testing create
-		//
 		$status = new Status(Status::REQUESTED);
 		// dd($status);
 		$beneficiary = Beneficiary::all()->random(); //	device_id: string
@@ -69,22 +67,24 @@ class Ordering implements OrderingContract
 		$orderBuyer	= Buyer::clientCopy($buyer);
 		$orderSeller = Seller::clientCopy($seller);
 		$order	= new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection);
-		$status = new Status(Status::REQUESTED);
-		$order->addStatus($status);
+		$state = new OrderState(Status::REQUESTED, $buyer, $seller);
+		$order->addState($state);
 		OrderRepository::save($order);
 		return $order;
 	}
 
 	public function getBuyerOrder(BuyerContract $buyer, $orderId): ?Order 
 	{
-		$orderBuyer	= Buyer::clientCopy($buyer);
+		$asker = Buyer::clientCopy($buyer);
 		$order = OrderRepository::find($orderId);
 		return $order;
 	}
 
 	public function getBuyerOrders(BuyerContract $buyer, $args = null): ?OrdersCollection 
 	{
-
+		$asker = Buyer::clientCopy($buyer);
+		// $orders = OrderRepository::listForBuyer($buyer);
+		return $orders;
 	}
 }
 

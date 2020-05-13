@@ -26,9 +26,9 @@ class Order extends Model
 		return $this->hasMany(OrderItem::class);
 	}
 
-	public function statuses() 
+	public function states() 
 	{
-		return $this->hasMany(OrderStatus::class);
+		return $this->hasMany(OrderState::class);
 	}
 
 	public function address()

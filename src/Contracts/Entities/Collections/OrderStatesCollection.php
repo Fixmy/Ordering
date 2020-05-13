@@ -4,7 +4,7 @@ namespace Fixme\Ordering\Contracts\Entities\Collections;
 
 use Fixme\Ordering\Entities\Values\Status;
 
-interface OrderStatusesCollection
+interface OrderStatesCollection
 {
-    public function getActiveStatus(): Status;
+    public function getActiveState(): Status;
 }

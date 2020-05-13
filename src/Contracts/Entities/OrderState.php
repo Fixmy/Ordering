@@ -6,7 +6,7 @@ use Fixme\Ordering\Contracts\Client\Polymorphs;
 use Fixme\Ordering\Entities\Order;
 use Fixme\Ordering\Entities\Values\Status;
 
-interface OrderStatus 
+interface OrderState 
 {
 	/**
 	 * [getStatus description]
@@ -16,16 +16,16 @@ interface OrderStatus
 	public function getStatus(): Status;
 
 	/**
-	 * [order description]
-	 * 
-	 * @return Order [description]
-	 */
-	public function getOrder(): Order;
-
-	/**
 	 *  returns the issuer of the status
 	 * 
 	 * @return Polymorphs $issuer
 	 */
 	public function getIssuer(): Polymorphs;
+
+	/**
+	 *  returns the maintainer of the status
+	 * 
+	 * @return Polymorphs $maintainer
+	 */
+	public function getMaintainer(): ?Polymorphs;
 }

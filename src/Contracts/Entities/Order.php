@@ -5,8 +5,9 @@ namespace Fixme\Ordering\Contracts\Entities;
 use Fixme\Ordering\Contracts\Entities\Values\Status;
 use Fixme\Ordering\Entities\AddressInfo;
 use Fixme\Ordering\Entities\Buyer;
+use Fixme\Ordering\Entities\OrderState;
 use Fixme\Ordering\Entities\Collections\ItemsCollection;
-use Fixme\Ordering\Entities\Collections\OrderStatusesCollection;
+use Fixme\Ordering\Entities\Collections\OrderStatesCollection;
 use Fixme\Ordering\Entities\Seller;
 
 interface Order 
@@ -55,19 +56,19 @@ interface Order
 	public function getCurrency(): string;
 
 	/**
-	 * returns a list of orderStatuses
+	 * returns a list of orderStates
 	 * 
-	 * @return Fixme\Ordering\Collections\OrderStatusesCollection
+	 * @return Fixme\Ordering\Collections\OrderStatesCollection
 	 */
-	public function getStatuses(): OrderStatusesCollection;
+	public function getStates(): OrderStatesCollection;
 
 	/**
 	 * adds a new status for the order
 	 * 
-	 * @param Status    $status   [description]
+	 * @param OrderState    $state   [description]
 	 * @param bool|null $activate [description]
-	 * @return OrderStatusesCollection $statuses
+	 * @return OrderStatesCollection $states
 	 */
-	public function addStatus(Status $status, bool $activate = null): OrderStatusesCollection;
+	public function addState(OrderState $state, bool $activate = null): OrderStatesCollection;
 
 }

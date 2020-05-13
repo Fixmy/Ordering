@@ -45,12 +45,16 @@ class CreateOrdersTable extends Migration
         });
 
 
-        Schema::create($this->predecessor.'order_status', function (Blueprint $table) {
+        Schema::create($this->predecessor.'order_states', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id')->unsigned();
-            $table->foreign('order_id')->references('id')->on($this->predecessor.'orders')->onDelete('cascade');
-            $table->integer('updater_id')->unsigned();
-            $table->string('updater_type');
+            $table->foreign('order_id')->references('id')
+							            ->on($this->predecessor.'orders')
+							            ->onDelete('cascade');
+            $table->integer('issuer_id')->unsigned();
+            $table->string('issuer_type');
+            $table->integer('maintainer_id')->unsigned();
+            $table->string('maintainer_type');
             $table->enum('status', array_values(Status::getStatuses()));
             $table->timestamps();
 			$table->softDeletes();
@@ -81,7 +85,7 @@ class CreateOrdersTable extends Migration
     {
  		Schema::dropIfExists($this->predecessor.'order_items');
  		Schema::dropIfExists($this->predecessor.'order_addresses');
- 		Schema::dropIfExists($this->predecessor.'order_status');
+ 		Schema::dropIfExists($this->predecessor.'order_states');
  		Schema::dropIfExists($this->predecessor.'orders');
     }
 }

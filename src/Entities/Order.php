@@ -6,7 +6,7 @@ use Fixme\Ordering\Contracts\Entities\Order as OrderContract;
 use Fixme\Ordering\Contracts\Entities\Values\Status;
 use Fixme\Ordering\Entities\AddressInfo;
 use Fixme\Ordering\Entities\Collections\ItemsCollection;
-use Fixme\Ordering\Entities\Collections\OrderStatusesCollection;
+use Fixme\Ordering\Entities\Collections\OrderStatesCollection;
 
 class Order implements OrderContract
 {
@@ -16,7 +16,7 @@ class Order implements OrderContract
 	protected $addressInfo;
 	protected $currency = 'USD';
 	private $id;
-	protected $statuses;
+	protected $states;
 
 	/**
 	 * Creates a new Order Class Entity
@@ -25,26 +25,24 @@ class Order implements OrderContract
 	 * @param Seller          $seller
 	 * @param AddressInfo     $addressInfo
 	 * @param ItemsCollection $items       
+	 * @param OrderStatesCollection|null $states
 	 * @param int|null $id        
-	 * @param OrderStatusesCollection|null $statuses       
 	 */
 	public function __construct(
 		Buyer $buyer,
 		Seller $seller,
 		AddressInfo $addressInfo,
 		ItemsCollection $items,
-		int $id = null,
-		OrderStatusesCollection $statuses = null
+		OrderStatesCollection $states = null
 	) {
-    	$this->buyer = $buyer;
-    	$this->seller = $seller;
-    	$this->items = $items;
-    	$this->addressInfo = $addressInfo;
-    	$this->id = $id;
-    	if(isset($statuses)) {
-    		$this->statuses = $statuses;
+		$this->buyer   	= $buyer;
+		$this->seller	= $seller;
+		$this->items	= $items;
+		$this->addressInfo = $addressInfo;
+    	if(isset($states)) {
+    		$this->states = $states;
     	} else {
-    		$this->statuses = new OrderStatusesCollection();
+    		$this->states = new OrderStatesCollection(); //initializing a new collection
     	}
     }
 
@@ -53,6 +51,13 @@ class Order implements OrderContract
     	return $this->id;
     }
 
+    /**
+     * this is the only proprety that get sets from the DataRepository
+     * makes the entity dependent on an AutocomrentId, could be resolved
+     * by implementing UUID
+     * 
+     * @param int $id [description]
+     */
     public function setId(int $id): void
     {
     	$this->id = $id;
@@ -83,30 +88,22 @@ class Order implements OrderContract
 		return $this->currency;
 	}
 
-	public function getStatuses(): OrderStatusesCollection
+	public function getStates(): OrderStatesCollection
 	{
-		return $this->statuses;
-	}
-
-	public function setStatuses(OrderStatusesCollection $statuses)
-	{
-		 $this->statuses = $statuses;
+		return $this->states;
 	}
 
 	/**
-	 * [addStatus description]
+	 * [addState description]
 	 * 
-	 * @param Status    $status   [description]
+	 * @param OrderState $state   [description]
 	 * @param bool|null $activate [description]
 	 *
 	 * @return bool
 	 */
-	public function addStatus(Status $status, bool $activate = null): OrderStatusesCollection
+	public function addState(OrderState $state, bool $activate = null): OrderStatesCollection
 	{
-		$orderStatus = new OrderStatus($this, $status);
-		$orderStatus->setIssuer($this->buyer);
-		return $this->statuses->push($orderStatus);
+		return $this->states->push($state);
 	}
-
 
 }
