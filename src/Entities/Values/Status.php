@@ -21,9 +21,25 @@ class Status
 	public const COMPLETED  =	'completed'; // seller completes an order and received payment
 	public const ABORTED    =	'aborted'; // admin/system intervention
 
+	protected $type;
+
 	public static function getStatuses() {
 	    $thisClass = new \ReflectionClass(__CLASS__);
 	    return $thisClass->getConstants();
 	}
 
+	public function __construct(string $type = null)
+	{
+		$this->type = $type;
+	}
+
+	public function setType(string): string
+	{
+		return $this->type;
+	}
+
+	public function getType(): string
+	{
+		return $this->type;
+	}
 }
