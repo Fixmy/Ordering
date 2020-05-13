@@ -30,8 +30,9 @@ class Ordering implements OrderingContract
 	 */
 	public function test() 
 	{	
+		print('hello from ordering');
 		//testing create
-		$beneficiary = Beneficiary::all()->random(); //	device_id: string
+		// $beneficiary = Beneficiary::all()->random(); //	device_id: string
 		// $shop        = Shop::all()->random(); // 	shop_id: int
 		// $items       = Item::all()->random(3)->map(function($item) {
 		// 	return $item->toOrderItem($quantity = rand(1, 3), $price = rand(100, 500));
@@ -40,11 +41,12 @@ class Ordering implements OrderingContract
 		// $result = $this->request($beneficiary, $shop, $address, ...$items);
 
 		//testing read
-		$result = $this->getBuyerOrder($beneficiary, 13);
-		var_dump($result);
+		// $result = $this->getBuyerOrder($beneficiary, 13);
+		// var_dump($result);
 		return $result;
 	}
 
+	//Fixme\Ordering\Contracts\Ordering\Ordering::request(...args) implementation
 	public function request(
 		BuyerContract $buyer, 
 		SellerContract $seller, 
@@ -56,6 +58,7 @@ class Ordering implements OrderingContract
 		$orderSeller = Seller::clientCopy($seller);
 		$order	= new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection);
 		OrderRepository::save($order);
+
 		return $order;
 	}
 

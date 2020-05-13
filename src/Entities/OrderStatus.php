@@ -1,8 +1,10 @@
 <?php
 
 namespace Fixme\Ordering\Entities;
+
 use Fixme\Ordering\Contracts\Entities\OrderStatus as OrderStatusContract;
 use Fixme\Ordering\Entities\Values\Status;
+
 class OrderStatus implements OrderStatusContract
 {
 	protected $status;

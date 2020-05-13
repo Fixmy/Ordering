@@ -2,7 +2,9 @@
 
 namespace Fixme\Ordering\Entities\Values;
 
-class Status 
+use Fixme\Ordering\Contracts\Entities\Values\Status as StatusContract;
+
+class Status implements StatusContract
 {
 	public const REQUESTED  = 	'requested'; // buyer requested an order
 	public const ACCEPTED   =	'accepted'; // seller accepted an order
