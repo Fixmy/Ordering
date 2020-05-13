@@ -25,23 +25,37 @@ class Status implements StatusContract
 
 	protected $type;
 
-	public static function getStatuses() {
+	public function __construct(string $type = null)
+	{
+		if(isset($type))
+		{
+			$this->setType($type);
+		}
+	}
+
+	public static function getStatuses(): array
+	{
 	    $thisClass = new \ReflectionClass(__CLASS__);
 	    return $thisClass->getConstants();
 	}
 
-	public function __construct(string $type = null)
+	public function setType(string $type)
 	{
-		$this->type = $type;
-	}
-
-	public function setType(string): string
-	{
-		return $this->type;
+		if($this->isValidStatus($type)) {
+			$this->type = $type;
+		} else {
+			$exception = new \Exception('Invalid Status Type');
+			throw $exception;
+		}
 	}
 
 	public function getType(): string
 	{
 		return $this->type;
+	}
+
+	private function isValidStatus(string $type)
+	{
+		return in_array($type, $this->getStatuses());
 	}
 }

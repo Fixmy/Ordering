@@ -2,6 +2,7 @@
 
 namespace Fixme\Ordering\Entities;
 
+use Fixme\Ordering\Contracts\Client\Polymorphs;
 use Fixme\Ordering\Contracts\Entities\OrderStatus as OrderStatusContract;
 use Fixme\Ordering\Entities\Values\Status;
 
@@ -9,7 +10,14 @@ class OrderStatus implements OrderStatusContract
 {
 	protected $status;
 	private $order;
+	private $issuer;
 
+	/**
+	 * instantiate a new Order
+	 * 
+	 * @param Order  $order 
+	 * @param Status $status
+	 */
     public function __construct(Order $order, Status $status)
     {
     	$this->order = $order;
@@ -19,7 +27,7 @@ class OrderStatus implements OrderStatusContract
     /**
      * @return Status [description]
      */
-    public function status(): Status
+    public function getStatus(): Status
     {
     	return $this->status;
     }
@@ -35,8 +43,26 @@ class OrderStatus implements OrderStatusContract
     /**
      * @return Order [description]
      */
-    public function order(): Order
+    public function getOrder(): Order
     {
     	return $this->order;
+    }
+
+    /**
+     *  returns the issuer of the status
+     * 
+     * @return Polymorphs $issuer
+     */
+    public function getIssuer(): Polymorphs
+    {
+    	return $this->issuer;
+    }
+
+    /**
+     * @param Status $status [description]
+     */
+    public function setIssuer(Polymorphs $issuer)
+    {
+    	$this->issuer = $issuer;
     }
 }

@@ -20,8 +20,9 @@ interface Status
 
 	/**
 	 * set the type of the status, must exists in the getStatus
-	 * 
+	 *
+	 * @param string $type
 	 * @return void
 	 */
-	public function setType(string);
+	public function setType(string $type);
 }

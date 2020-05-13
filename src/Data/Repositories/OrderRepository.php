@@ -6,13 +6,17 @@ use Fixme\Ordering\Data\Interfaces\OrderRepository as OrderRepositoryInterface;
 use Fixme\Ordering\Data\Models\Order as OrderModel;
 use Fixme\Ordering\Data\Models\OrderAddress;
 use Fixme\Ordering\Data\Models\OrderItem;
+use Fixme\Ordering\Data\Models\OrderStatus;
 use Fixme\Ordering\Entities\AddressInfo;
 use Fixme\Ordering\Entities\Buyer;
 use Fixme\Ordering\Entities\Collections\ItemsCollection;
+use Fixme\Ordering\Entities\Collections\OrderStatusesCollection;
 use Fixme\Ordering\Entities\Collections\OrdersCollection;
 use Fixme\Ordering\Entities\Item;
 use Fixme\Ordering\Entities\Order;
+use Fixme\Ordering\Entities\OrderStatus as OrderStatusEntity;
 use Fixme\Ordering\Entities\Seller;
+use Fixme\Ordering\Entities\Values\Status;
 
 class OrderRepository implements OrderRepositoryInterface
 {	
@@ -25,14 +29,16 @@ class OrderRepository implements OrderRepositoryInterface
     public static function save(Order &$order): bool
     {
     	$orderModel = new OrderModel();
-		$orderModel->buyer_id    = $order->buyer->retrieveIdentifierValue();
-		$orderModel->buyer_type  = $order->buyer->retrieveClassType();
-		$orderModel->seller_id   = $order->seller->retrieveIdentifierValue();
-		$orderModel->seller_type = $order->seller->retrieveClassType();
-		$orderModel->currency = $order->currency;
+		$orderModel->buyer_id    = $order->getBuyer()->retrieveIdentifierValue();
+		$orderModel->buyer_type  = $order->getBuyer()->retrieveClassType();
+		$orderModel->seller_id   = $order->getSeller()->retrieveIdentifierValue();
+		$orderModel->seller_type = $order->getSeller()->retrieveClassType();
+		$orderModel->currency = $order->getCurrency();
 		$orderModel->save();
+		///////////////////////////////
 		$order->setId($orderModel->id);
-		$orderItems = $order->items->map(function($item) use ($orderModel) {
+		///////////////////////////////
+		$orderItems = $order->getItems()->map(function($item) use ($orderModel) {
 			$orderItem = [
 				'order_id'    => $orderModel->id,
 				'quantity'    => $item->getQuantity(),
@@ -41,15 +47,30 @@ class OrderRepository implements OrderRepositoryInterface
 				'description' => $item->getItemOrderDescription(),
 				'item_id'     => $item->retrieveIdentifierValue(),
 				'item_type'   => $item->retrieveClassType(),
+				'updated_at'   => new \DateTime(),
+				'created_at'   => new \DateTime(),
 			];
 			return $orderItem;
 		});
 		OrderItem::insert($orderItems->toArray());
 		$orderAddress = new OrderAddress([
-			'phone_number' => $order->addressInfo->getPhone(),
-			'address_line' => $order->addressInfo->getAddressLine(),
+			'phone_number' => $order->getAddressInfo()->getPhone(),
+			'address_line' => $order->getAddressInfo()->getAddressLine(),
 		]);
 		$orderModel->address()->save($orderAddress);
+
+		$orderItems = $order->getStatuses()->map(function($orderStatus) use ($orderModel) {
+			$orderItem = [
+				'order_id'     => $orderModel->id,
+				'updater_type' => $orderStatus->getIssuer()->retrieveClassType(),
+				'updater_id'   => $orderStatus->getIssuer()->retrieveIdentifierValue(),
+				'status'       => $orderStatus->getStatus()->getType(),
+				'updated_at'   => new \DateTime(),
+				'created_at'   => new \DateTime(),
+			];
+			return $orderItem;
+		});
+		OrderStatus::insert($orderItems->toArray());
         return true;
     }
 
@@ -97,10 +118,20 @@ class OrderRepository implements OrderRepositoryInterface
 				return $itemEntity;
 			})
 		);
+
 		$orderBuyer	= Buyer::clientCopy($orderModel->buyer);
 		$orderSeller = Seller::clientCopy($orderModel->seller);
 		$addressInfo = new AddressInfo($orderModel->address->phone_number, $orderModel->address->address_line);
-		$orderEntity  = new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection);
+		$orderEntity  = new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection, $orderModel->id);
+
+		$orderStatusesCollection = new OrderStatusesCollection(
+			$orderModel->statuses->map(function($statusModel) use($orderEntity) {
+				$status = new Status($statusModel->status);
+				$orderStasus = new OrderStatusEntity($orderEntity, $status);
+				return $orderStasus;
+			})
+		);
+		$orderEntity->setStatuses($orderStatusesCollection);
 		return $orderEntity;
     }
 

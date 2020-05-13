@@ -2,7 +2,8 @@
 
 namespace Fixme\Ordering\Contracts\Entities;
 
-use Fixme\Ordering\Contracts\Entities\Order;
+use Fixme\Ordering\Contracts\Client\Polymorphs;
+use Fixme\Ordering\Entities\Order;
 use Fixme\Ordering\Entities\Values\Status;
 
 interface OrderStatus 
@@ -12,12 +13,19 @@ interface OrderStatus
 	 * 
 	 * @return Status [description]
 	 */
-	public function status(): Status;
+	public function getStatus(): Status;
 
 	/**
 	 * [order description]
 	 * 
 	 * @return Order [description]
 	 */
-	public function order(): Order;
+	public function getOrder(): Order;
+
+	/**
+	 *  returns the issuer of the status
+	 * 
+	 * @return Polymorphs $issuer
+	 */
+	public function getIssuer(): Polymorphs;
 }
