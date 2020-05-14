@@ -8,6 +8,7 @@ namespace Fixme\Ordering;
 use App\Models\Items\Item;
 use App\Models\Shops\Shop;
 use App\Models\Users\Beneficiary;
+use Illuminate\Database\Eloquent\Relations\Relation;
 /**
  *  Contracts
  */
@@ -42,18 +43,15 @@ class Ordering implements OrderingContract
 	public function test() 
 	{	
 		print('hello from ordering');
-		//testing create
-		$status = new Status(Status::REQUESTED);
-		// dd($status);
-		$beneficiary = Beneficiary::all()->random(); //	device_id: string
-		$shop        = Shop::all()->random(); // 	shop_id: int
-		$items       = Item::all()->random(3)->map(function($item) {
-			return $item->toOrderItem($quantity = rand(1, 3), $price = rand(100, 500));
-		});
-		$address     = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
-		$order = $this->request($beneficiary, $shop, $address, ...$items);
-		$result = $this->getBuyerOrder($beneficiary, $order->getId());
-		dd($result);
+		// $beneficiary = Beneficiary::all()->random(); //	device_id: string
+		// $shop        = Shop::all()->random(); // 	shop_id: int
+		// $items       = Item::all()->random(3)->map(function($item) {
+		// 	return $item->toOrderItem($quantity = rand(1, 3), $price = rand(100, 500));
+		// });
+		// $address     = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
+		// $order = $this->request($beneficiary, $shop, $address, ...$items);
+		// $result = $this->getBuyerOrder($beneficiary, $order->getId());
+		// return $result->toArray();
 	}
 
 	//Fixme\Ordering\Contracts\Ordering\Ordering::request(...args) implementation

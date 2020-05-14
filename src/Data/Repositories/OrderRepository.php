@@ -32,9 +32,11 @@ class OrderRepository implements OrderRepositoryInterface
     	$orderModel = new OrderModel();
 		$orderModel->buyer_id    = $order->getBuyer()->retrieveIdentifierValue();
 		$orderModel->buyer_type  = $order->getBuyer()->retrieveClassType();
+		$orderModel->buyer_key   = $order->getBuyer()->retrieveIdentifierKey();
 		$orderModel->seller_id   = $order->getSeller()->retrieveIdentifierValue();
 		$orderModel->seller_type = $order->getSeller()->retrieveClassType();
-		$orderModel->currency = $order->getCurrency();
+		$orderModel->seller_key  = $order->getSeller()->retrieveIdentifierKey();
+		$orderModel->currency    = $order->getCurrency();
 		$orderModel->save();
 		///////////////////////////////
 		$order->setId($orderModel->id);
@@ -48,8 +50,9 @@ class OrderRepository implements OrderRepositoryInterface
 				'description' => $item->getItemOrderDescription(),
 				'item_id'     => $item->retrieveIdentifierValue(),
 				'item_type'   => $item->retrieveClassType(),
-				'updated_at'   => new \DateTime(),
-				'created_at'   => new \DateTime(),
+				'item_key'    => $item->retrieveIdentifierKey(),
+				'updated_at'  => new \DateTime(),
+				'created_at'  => new \DateTime(),
 			];
 			return $orderItem;
 		});
@@ -64,14 +67,16 @@ class OrderRepository implements OrderRepositoryInterface
 
 		$orderStates = $order->getStates()->map(function($state) use ($orderModel) {
 			$orderItem = [
-				'order_id'    => $orderModel->id,
-				'issuer_type' => $state->getIssuer()->retrieveClassType(),
-				'issuer_id'   => $state->getIssuer()->retrieveIdentifierValue(),
+				'order_id'        => $orderModel->id,
+				'issuer_type'     => $state->getIssuer()->retrieveClassType(),
+				'issuer_id'       => $state->getIssuer()->retrieveIdentifierValue(),
+				'issuer_key'       => $state->getIssuer()->retrieveIdentifierKey(),
 				'maintainer_type' => $state->getMaintainer()->retrieveClassType(),
 				'maintainer_id'   => $state->getMaintainer()->retrieveIdentifierValue(),
-				'status'       => $state->getStatus()->getType(),
-				'updated_at'   => new \DateTime(),
-				'created_at'   => new \DateTime(),
+				'maintainer_key'  => $state->getMaintainer()->retrieveIdentifierKey(),
+				'status'          => $state->getStatus()->getType(),
+				'updated_at'      => new \DateTime(),
+				'created_at'      => new \DateTime(),
 			];
 			return $orderItem;
 		});
@@ -115,6 +120,12 @@ class OrderRepository implements OrderRepositoryInterface
     	return (new OrdersCollection());
     }
 
+    /**
+     * Transforms an Order Model to an Entity
+     * 
+     * @param  OrderModel $orderModel
+     * @return Order
+     */
     private static function orderTransformer(OrderModel $orderModel): Order 
     {
 		$itemsCollection = new ItemsCollection(
@@ -122,6 +133,7 @@ class OrderRepository implements OrderRepositoryInterface
 				$itemEntity = new Item($item->quantity, $item->price, $item->description);
 				$itemEntity->setIdentifierValue($item->item_id);
 				$itemEntity->setClassType($item->item_type);
+				$itemEntity->setIdentifierKey($item->item_key);
 				return $itemEntity;
 			})
 		);
@@ -132,8 +144,8 @@ class OrderRepository implements OrderRepositoryInterface
 
 		$orderStatesCollection = new OrderStatesCollection(
 			$orderModel->states->map(function($stateModel) {
-				$issuer     = new Polymorph($stateModel->issuer_type, $stateModel->issuer_id);
-				$maintainer = new Polymorph($stateModel->maintainer_type, $stateModel->maintainer_id);
+				$issuer     = new Polymorph($stateModel->issuer_type, $stateModel->issuer_id, $stateModel->issuer_key);
+				$maintainer = new Polymorph($stateModel->maintainer_type, $stateModel->maintainer_id, $stateModel->maintainer_key);
 				$orderState = new OrderState($stateModel->status, $issuer, $maintainer);
 				return $orderState;
 			})

@@ -6,6 +6,7 @@ use Fixme\Ordering\Ordering;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class OrderingServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,10 @@ class OrderingServiceProvider extends ServiceProvider
 		$this->publishes([
 		    dirname(__DIR__, 2).'/config.php' => config_path('ordering.php'),
 		]);
+		
+		$polyMorphsBinding = config('ordering.polymorph_bindings', []);
+		
+		Relation::morphMap($polyMorphsBinding);
     }
 
     /**

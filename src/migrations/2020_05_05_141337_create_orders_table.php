@@ -26,8 +26,10 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->integer('buyer_id')->unsigned();
             $table->string('buyer_type');
+            $table->string('buyer_key');
             $table->integer('seller_id')->unsigned();
             $table->string('seller_type');
+            $table->string('seller_key');
             $table->string('currency');
             $table->string('currency_value')->nullable();
             $table->string('notes')->nullable();
@@ -44,7 +46,6 @@ class CreateOrdersTable extends Migration
             $table->timestamps();
         });
 
-
         Schema::create($this->predecessor.'order_states', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id')->unsigned();
@@ -53,8 +54,10 @@ class CreateOrdersTable extends Migration
 							            ->onDelete('cascade');
             $table->integer('issuer_id')->unsigned();
             $table->string('issuer_type');
+            $table->string('issuer_key');
             $table->integer('maintainer_id')->unsigned();
             $table->string('maintainer_type');
+            $table->string('maintainer_key');
             $table->enum('status', array_values(Status::getStatuses()));
             $table->timestamps();
 			$table->softDeletes();
@@ -67,6 +70,7 @@ class CreateOrdersTable extends Migration
             $table->string('notes')->nullable();
             $table->integer('item_id')->unsigned();
             $table->string('item_type');
+            $table->string('item_key');
 			$table->integer('quantity')->unsigned();
             $table->string('description');
             $table->float('unit_price');
