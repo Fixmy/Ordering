@@ -4,8 +4,9 @@ namespace Fixme\Ordering\Entities;
 
 use Fixme\Ordering\Contracts\Entities\Item as ItemContract;
 use Fixme\Ordering\Traits\ActAsItem;
+use Illuminate\Contracts\Support\Arrayable;
 
-class Item implements ItemContract
+class Item implements ItemContract, Arrayable
 {	
  	use ActAsItem; 
 
@@ -20,14 +21,11 @@ class Item implements ItemContract
     {
     	$orderItem = [
     		'quantity' => $this->getQuantity(),
-    		'unit_price' => $this->getUnitPrice(),
+    		'unitPrice' => $this->getUnitPrice(),
     		'total' => $this->getLineItemPrice(),
     		'description' => $this->getItemOrderDescription(),
-    		'class' => $this->retrieveClassType(),
     	];
-    	$identifier = $this->retrieveIdentifierKey();
-    	$orderItem[$identifier] = $this->retrieveIdentifierValue();
-    	return $orderItem;
+    	return array_merge($orderItem, $this->polymorphsToArray());
     }
 
 }

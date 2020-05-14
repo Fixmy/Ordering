@@ -19,19 +19,9 @@ class Buyer implements BuyerContract
     	return $buyer;
     }
 
-    // public function placeOrder() {
-    // }
-
-    // public function cancelOrder() {
-    // }
-
-    // public function confirmOrder() {
-    // }
-
-    // public function viewOrder() {
-    // }
-
-    // public function getOrderList() {
-    // }
+    public function toArray() 
+    {
+    	return $this->polymorphsToArray();
+    }
 
 }

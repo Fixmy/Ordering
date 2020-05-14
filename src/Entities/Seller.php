@@ -22,4 +22,9 @@ class Seller implements SellerContract
     	$seller->setClassType($toCopy->retrieveClassType());
     	return $seller;
     }
+
+    public function toArray() 
+    {
+    	return $this->polymorphsToArray();
+    }
 }

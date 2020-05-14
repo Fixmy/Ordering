@@ -106,4 +106,16 @@ class Order implements OrderContract
 		return $this->states->push($state);
 	}
 
+	public function toArray() 
+	{
+		return [
+			'id'     => $this->getId(),
+			'buyer'  => $this->buyer->toArray(),
+			'seller' => $this->seller->toArray(),
+			'items'  => $this->items->toArray(),
+			'addressInfo' => $this->addressInfo->toArray(),
+			'states' => $this->states->toArray(),
+		];
+	}
+
 }

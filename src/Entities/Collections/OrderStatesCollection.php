@@ -12,4 +12,16 @@ class OrderStatesCollection extends Collection implements Contract
     {
     	return (new Status());
     }
+
+    /**
+     * Get the collection of items as a plain array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array_map(function ($value) {
+            return method_exists($value, 'toArray') ? $value->toArray() : $value;
+        }, $this->items);
+    }
 }

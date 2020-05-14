@@ -76,4 +76,13 @@ class OrderState implements StateContract
     {
     	$this->maintainer = $maintainer;
     }
+
+	public function toArray() 
+    {
+    	return [
+    		'maintainer' => $this->maintainer ? $this->maintainer->polymorphsToArray() : null,
+    		'issuer' => $this->issuer->polymorphsToArray(),
+    		'status' => $this->status->getType(),
+    	];
+    }
 }

@@ -24,4 +24,12 @@ class AddressInfo implements AddressInfoContract
     {
     	return $this->addressLine;
     }
+
+	public function toArray() 
+    {
+    	return [
+    		'phone' => $this->phone,
+    		'addressLine' => $this->addressLine,
+    	];
+    }
 }
