@@ -1,6 +1,8 @@
 <?php
 namespace Fixme\Ordering\Traits;
 
+use Illuminate\Database\Eloquent\Relations\Relation;
+
 trait Polymorphs
 {	
 	protected $identifierKey;
@@ -76,6 +78,41 @@ trait Polymorphs
 	public function setClassType(string $type) : void 
 	{
 		$this->identifierClass = $type;
+	}
+
+	/**
+	 * tries to retrieve the original model
+	 * 
+	 * @return Model|null [description]
+	 */
+	public function tryGetModel() 
+	{
+		if(class_exists($this->retrieveClassType())) {
+			$modelClass = $this->retrieveClassType();
+		} else {
+			$modelClass = Relation::getMorphedModel($this->retrieveClassType());
+		}
+		if($modelClass) 
+		{
+			$model = $modelClass::where($this->retrieveIdentifierKey(), $this->retrieveIdentifierValue())->first();
+			return $model; 
+		}
+
+		return null;
+	}
+
+	/**
+	 * returns the polymorphs methods as an array
+	 * 
+	 * @return array
+	 */
+	public function polymorphsToArray()
+	{
+		return [
+			'identifierKey' => $this->retrieveIdentifierKey(),
+			'identifierValue' => $this->retrieveIdentifierValue(),
+			'identifierClass' => $this->retrieveClassType(),
+		];
 	}
 
 }
