@@ -6,6 +6,7 @@ use Fixme\Ordering\Contracts\Entities\Order as OrderContract;
 use Fixme\Ordering\Entities\AddressInfo;
 use Fixme\Ordering\Entities\Collections\ItemsCollection;
 use Fixme\Ordering\Entities\Collections\OrderStatesCollection;
+use Fixme\Ordering\Entities\Values\Currency;
 
 class Order implements OrderContract
 {
@@ -13,7 +14,7 @@ class Order implements OrderContract
 	protected $seller; 
 	protected $items;
 	protected $addressInfo;
-	protected $currency = 'USD';
+	protected $currency;
 	private $id;
 	protected $states;
 
@@ -24,6 +25,7 @@ class Order implements OrderContract
 	 * @param Seller          $seller
 	 * @param AddressInfo     $addressInfo
 	 * @param ItemsCollection $items       
+	 * @param Currency|null $currency
 	 * @param OrderStatesCollection|null $states
 	 * @param int|null $id        
 	 */
@@ -32,12 +34,14 @@ class Order implements OrderContract
 		Seller $seller,
 		AddressInfo $addressInfo,
 		ItemsCollection $items,
+		Currency $currency,
 		OrderStatesCollection $states = null
 	) {
 		$this->buyer   	= $buyer;
 		$this->seller	= $seller;
 		$this->items	= $items;
 		$this->addressInfo = $addressInfo;
+		$this->currency = $currency;
     	if(isset($states)) {
     		$this->states = $states;
     	} else {
@@ -110,9 +114,9 @@ class Order implements OrderContract
 	/**
 	 *  returns the currency that is used for the order price
 	 * 
-	 * @return string
+	 * @return Currency
 	 */
-	public function getCurrency(): string
+	public function getCurrency(): Currency
 	{
 		return $this->currency;
 	}
@@ -160,7 +164,8 @@ class Order implements OrderContract
 			'items'       => $this->items->toArray(),
 			'addressInfo' => $this->addressInfo->toArray(),
 			'states'      => $this->states->toArray(),
-			'itemsPrice'  => $this->getItemsPrice()
+			'itemsPrice'  => $this->getItemsPrice(),
+			'currency'  => $this->currency->getCode(),
 		];
 	}
 

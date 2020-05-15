@@ -19,6 +19,7 @@ interface Ordering
 	 * @param  Fixme\Ordering\Contracts\Client\Buyer  $buyer
 	 * @param  Fixme\Ordering\Contracts\Client\Seller $seller
 	 * @param  Fixme\Ordering\Contracts\Client\AddressInfo $addressInfo
+	 * @param  string $currencyCode a three letter abbriviation of the currency (LBP, USD, etc..)
 	 * @param  Fixme\Ordering\Contracts\Client\Item[] $items
 	 * @return Fixme\Ordering\Entities\Order
 	 */
@@ -26,6 +27,7 @@ interface Ordering
 		Buyer $buyer,
 		Seller $seller,
 		AddressInfo $addressInfo,
+		string $currencyCode,
 	 	Item ...$items
 	): Order;
 

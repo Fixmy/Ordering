@@ -9,6 +9,7 @@ use Fixme\Ordering\Entities\Collections\ItemsCollection;
 use Fixme\Ordering\Entities\Collections\OrderStatesCollection;
 use Fixme\Ordering\Entities\OrderState;
 use Fixme\Ordering\Entities\Seller;
+use Fixme\Ordering\Entities\Values\Currency;
 
 interface Order extends Arrayable
 {
@@ -51,9 +52,9 @@ interface Order extends Arrayable
 	/**
 	 *  returns the currency that is used for the order price
 	 * 
-	 * @return string
+	 * @return Currency $currency
 	 */
-	public function getCurrency(): string;
+	public function getCurrency(): Currency;
 
 	/**
 	 * returns a list of orderStates
@@ -76,5 +77,5 @@ interface Order extends Arrayable
 	 * 
 	 * @return float
 	 */
-	public function getItemsPrice(): float
+	public function getItemsPrice(): float;
 }

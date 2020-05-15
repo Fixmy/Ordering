@@ -8,29 +8,21 @@ namespace Fixme\Ordering;
 use App\Models\Items\Item;
 use App\Models\Shops\Shop;
 use App\Models\Users\Beneficiary;
-/**
- *  Contracts
- */
-use Fixme\Ordering\Contracts\Ordering as OrderingContract; //Implementation Contract
-use Fixme\Ordering\Contracts\Client\Buyer as BuyerContract;
-use Fixme\Ordering\Contracts\Client\Seller as SellerContract;
-use Fixme\Ordering\Contracts\Client\Item as ItemContract;
 use Fixme\Ordering\Contracts\Client\AddressInfo as AddressInfoContract;
-/**
- * Entities
- */
-use Fixme\Ordering\Entities\Order;
-use Fixme\Ordering\Entities\Buyer;
+use Fixme\Ordering\Contracts\Client\Buyer as BuyerContract;
+use Fixme\Ordering\Contracts\Client\Item as ItemContract;
+use Fixme\Ordering\Contracts\Client\Seller as SellerContract;
+use Fixme\Ordering\Contracts\Ordering as OrderingContract;
+use Fixme\Ordering\Data\Repositories\OrderRepository;
 use Fixme\Ordering\Entities\AddressInfo;
-use Fixme\Ordering\Entities\OrderState;
-use Fixme\Ordering\Entities\Seller;
+use Fixme\Ordering\Entities\Buyer;
 use Fixme\Ordering\Entities\Collections\ItemsCollection;
 use Fixme\Ordering\Entities\Collections\OrdersCollection;
+use Fixme\Ordering\Entities\Order;
+use Fixme\Ordering\Entities\OrderState;
+use Fixme\Ordering\Entities\Seller;
+use Fixme\Ordering\Entities\Values\Currency;
 use Fixme\Ordering\Entities\Values\Status;
-/**
- * Data
- */
-use Fixme\Ordering\Data\Repositories\OrderRepository;
 
 class Ordering implements OrderingContract
 {	
@@ -49,7 +41,7 @@ class Ordering implements OrderingContract
 		});
 		$address = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
 
-		$order = $this->request($buyer, $seller, $address, ...$items);
+		$order = $this->request($buyer, $seller, $address, 'LBP', ...$items);
 
 		return $order;
 		$orderId = $order->getId();		
@@ -73,6 +65,7 @@ class Ordering implements OrderingContract
 	 * @param  Fixme\Ordering\Contracts\Client\Buyer  $buyer
 	 * @param  Fixme\Ordering\Contracts\Client\Seller $seller
 	 * @param  Fixme\Ordering\Contracts\Client\AddressInfo $addressInfo
+	 * @param  string $currencyCode a three letter abbriviation of the currency (LBP, USD, etc)
 	 * @param  Fixme\Ordering\Contracts\Client\Item[] $items
 	 * @return Fixme\Ordering\Entities\Order
 	 */
@@ -80,12 +73,14 @@ class Ordering implements OrderingContract
 		BuyerContract $buyer, 
 		SellerContract $seller, 
 		AddressInfoContract $addressInfo, 
+		string $currency,
 		ItemContract ...$items
 	): Order {
 		$itemsCollection = new ItemsCollection($items);
 		$orderBuyer	= Buyer::clientCopy($buyer);
 		$orderSeller = Seller::clientCopy($seller);
-		$order	= new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection);
+		$orderCurrency = new Currency($currency);
+		$order	= new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection, $orderCurrency);
 		$state = new OrderState(Status::REQUESTED, $buyer, $seller);
 		$order->addState($state);
 		OrderRepository::save($order);

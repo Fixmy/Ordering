@@ -16,6 +16,7 @@ use Fixme\Ordering\Entities\Item;
 use Fixme\Ordering\Entities\Order;
 use Fixme\Ordering\Entities\OrderState as OrderState;
 use Fixme\Ordering\Entities\Seller;
+use Fixme\Ordering\Entities\Values\Currency;
 use Fixme\Ordering\Entities\Values\Polymorph;
 use Fixme\Ordering\Entities\Values\Status;
 
@@ -36,7 +37,7 @@ class OrderRepository implements OrderRepositoryInterface
 		$orderModel->seller_id   = $order->getSeller()->retrieveIdentifierValue();
 		$orderModel->seller_type = $order->getSeller()->retrieveClassType();
 		$orderModel->seller_key  = $order->getSeller()->retrieveIdentifierKey();
-		$orderModel->currency    = $order->getCurrency();
+		$orderModel->currency    = $order->getCurrency()->getCode();
 		$orderModel->save();
 		///////////////////////////////
 		$order->setId($orderModel->id);
@@ -189,6 +190,7 @@ class OrderRepository implements OrderRepositoryInterface
 		$orderBuyer	= Buyer::clientCopy($orderModel->buyer);
 		$orderSeller = Seller::clientCopy($orderModel->seller);
 		$addressInfo = new AddressInfo($orderModel->address->phone_number, $orderModel->address->address_line);
+		$currency = new Currency($orderModel->currency);
 		$orderStatesCollection = new OrderStatesCollection(
 			$orderModel->states->map(function($stateModel) {
 				$issuer     = new Polymorph($stateModel->issuer_type, $stateModel->issuer_id, $stateModel->issuer_key);
@@ -198,7 +200,7 @@ class OrderRepository implements OrderRepositoryInterface
 			})
 		);
 
-		$orderEntity  = new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection, $orderStatesCollection);
+		$orderEntity  = new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection, $currency, $orderStatesCollection);
 		$orderEntity->setId($orderModel->id);
 		return $orderEntity;
     }
