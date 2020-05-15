@@ -17,6 +17,7 @@ class Order implements OrderContract
 	protected $currency;
 	private $id;
 	protected $states;
+	protected $createdAt;
 
 	/**
 	 * Creates a new Order Class Entity
@@ -47,6 +48,7 @@ class Order implements OrderContract
     	} else {
     		$this->states = new OrderStatesCollection(); //initializing a new collection
     	}
+    	$this->createdAt = new \DateTime();
     }
 
     /**
@@ -155,6 +157,16 @@ class Order implements OrderContract
 		return $this->getItems()->getTotalItemsPrice();
 	}
 
+	public function setCreationDate(\Datetime $date) 
+	{
+		$this->createdAt = $date;
+	}
+
+	public function getCreatedAt(): \Datetime
+	{
+		return $this->createdAt;
+	}
+
 	public function toArray()
 	{
 		return [
@@ -165,7 +177,8 @@ class Order implements OrderContract
 			'addressInfo' => $this->addressInfo->toArray(),
 			'states'      => $this->states->toArray(),
 			'itemsPrice'  => $this->getItemsPrice(),
-			'currency'  => $this->currency->getCode(),
+			'currency'    => $this->currency->getCode(),
+			'createdAt'   => $this->createdAt,
 		];
 	}
 

@@ -38,6 +38,7 @@ class OrderRepository implements OrderRepositoryInterface
 		$orderModel->seller_type = $order->getSeller()->retrieveClassType();
 		$orderModel->seller_key  = $order->getSeller()->retrieveIdentifierKey();
 		$orderModel->currency    = $order->getCurrency()->getCode();
+		$orderModel->created_at   = $order->getCreatedAt();
 		$orderModel->save();
 		///////////////////////////////
 		$order->setId($orderModel->id);
@@ -52,8 +53,8 @@ class OrderRepository implements OrderRepositoryInterface
 				'item_id'     => $item->retrieveIdentifierValue(),
 				'item_type'   => $item->retrieveClassType(),
 				'item_key'    => $item->retrieveIdentifierKey(),
-				'updated_at'  => new \DateTime(),
 				'created_at'  => new \DateTime(),
+				'updated_at'  => new \DateTime(),
 			];
 			return $orderItem;
 		});
@@ -76,8 +77,8 @@ class OrderRepository implements OrderRepositoryInterface
 				'maintainer_id'   => $state->getMaintainer()->retrieveIdentifierValue(),
 				'maintainer_key'  => $state->getMaintainer()->retrieveIdentifierKey(),
 				'status'          => $state->getStatus()->getType(),
-				'updated_at'      => new \DateTime(),
 				'created_at'      => new \DateTime(),
+				'updated_at'      => new \DateTime(),
 			];
 			return $orderItem;
 		});
@@ -202,6 +203,7 @@ class OrderRepository implements OrderRepositoryInterface
 
 		$orderEntity  = new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection, $currency, $orderStatesCollection);
 		$orderEntity->setId($orderModel->id);
+		$orderEntity->setCreationDate($orderModel->created_at);
 		return $orderEntity;
     }
 
