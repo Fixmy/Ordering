@@ -6,6 +6,7 @@ use Fixme\Ordering\Contracts\Client\AddressInfo;
 use Fixme\Ordering\Contracts\Client\Buyer;
 use Fixme\Ordering\Contracts\Client\Item;
 use Fixme\Ordering\Contracts\Client\Seller;
+use Fixme\Ordering\Contracts\Entities\OrderState;
 use Fixme\Ordering\Entities\Collections\OrdersCollection;
 use Fixme\Ordering\Entities\Order;
 
@@ -28,7 +29,7 @@ interface Ordering
 	): Order;
 
 	/**
-	 * Returns an Order
+	 * Returns buyer Order
 	 * 
 	 * @param  Fixme\Ordering\Contracts\Client\Buyer  $buyer
 	 * @param  int $orderId
@@ -37,26 +38,51 @@ interface Ordering
 	public function getBuyerOrder(Buyer $buyer, $orderId): ?Order;
 
 	/**
-	 * [getBuyerOrders description]
+	 * Get a list of all buyer's orders
+	* (Incomplete Implementation)
+	 * 
 	 * @param  Fixme\Ordering\Contracts\Client\Buyer  $buyer
-	 * @param  mixed $args
+	 * @param  mixed|null $args
 	 * @return Fixme\Ordering\Entities\Collections\OrdersCollection
 	 */
-	public function getBuyerOrders(Buyer $buyer, $args = null): ?OrdersCollection;
+	public function getBuyerOrders(Buyer $buyer, $args = null): OrdersCollection;
+	
+	/**
+	 * Returns seller Order
+	 * (Incomplete Implementation)
+	 * 
+	 * @param  Fixme\Ordering\Contracts\Client\Seller $seller
+	 * @param  int $orderId
+	 * @return Fixme\Ordering\Entities\Order|null
+	 */
+	public function getSellerOrder(Seller $seller, $orderId): ?Order;
+	
+	/**
+	 * Get a list of all seller's orders
+	 * (Incomplete Implementation)
+	 * 
+	 * @param  Fixme\Ordering\Contracts\Client\Seller $seller
+	 * @param  mixed|null $args 
+	 * @return Fixme\Ordering\Entities\Collections\OrderCollection
+	 */
+	public function getSellerOrders(Seller $seller, $args = null): OrdersCollection;
+	
+	/**
+	 * sets a new state object on the order, and updating the order status accordingly
+	 * (Incomplete Implementation)
+	 * 
+	 * @param int $orderId
+	 * @param string $status  must exists in Fixme\Ordering\Entities\Values\Status::getStatuses()
+	 * @return Fixme\Ordering\Contracts\Entities\OrderState|null 
+	 */
+	public function setOrderState($orderId, string $status): ?OrderState;
 
-	// public function retrieveForBuyer(, $orderId);
-	// public function list($any, $status = 'any', $from = null, $to = null);
-
-
-	// public function confirm($client, $orderId);
-	// public function dispute($client, $orderId, $meta = null);
-	// public function cancel($any, $orderId);
-	// public function accept($merchant, $orderId);
-	// public function decline($merchant, $orderId);
-	// public function dispatch($merchant, $orderId, $traderId = null);
-	// public function close($merchant, $orderId, $traderId = null);
-	// public function retrieve($any, $orderId);
-	// public function retrieveAndExpend($any, $orderId);
-	// public function delete($admin, $orderId);
-	// public function list($any, $status = 'any', $from = null, $to = null);
+	/**
+	 * deletes an order
+	 * (Incomplete Implementation)
+	 * 
+	 * @param  int $orderId
+	 * @return bool $result of the delete operation
+	 */
+	public function delete($orderId): bool;
 }

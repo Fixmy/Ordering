@@ -8,11 +8,10 @@ namespace Fixme\Ordering;
 use App\Models\Items\Item;
 use App\Models\Shops\Shop;
 use App\Models\Users\Beneficiary;
-use Illuminate\Database\Eloquent\Relations\Relation;
 /**
  *  Contracts
  */
-use Fixme\Ordering\Contracts\Ordering as OrderingContract;
+use Fixme\Ordering\Contracts\Ordering as OrderingContract; //Implementation Contract
 use Fixme\Ordering\Contracts\Client\Buyer as BuyerContract;
 use Fixme\Ordering\Contracts\Client\Seller as SellerContract;
 use Fixme\Ordering\Contracts\Client\Item as ItemContract;
@@ -54,7 +53,15 @@ class Ordering implements OrderingContract
 		// return $result->toArray();
 	}
 
-	//Fixme\Ordering\Contracts\Ordering\Ordering::request(...args) implementation
+	/**
+	 * Requests a new Order
+	 * 
+	 * @param  Fixme\Ordering\Contracts\Client\Buyer  $buyer
+	 * @param  Fixme\Ordering\Contracts\Client\Seller $seller
+	 * @param  Fixme\Ordering\Contracts\Client\AddressInfo $addressInfo
+	 * @param  Fixme\Ordering\Contracts\Client\Item[] $items
+	 * @return Fixme\Ordering\Entities\Order
+	 */
 	public function request(
 		BuyerContract $buyer, 
 		SellerContract $seller, 
@@ -71,6 +78,13 @@ class Ordering implements OrderingContract
 		return $order;
 	}
 
+	/**
+	 * Returns buyer Order
+	 * 
+	 * @param  Fixme\Ordering\Contracts\Client\Buyer  $buyer
+	 * @param  int $orderId
+	 * @return Fixme\Ordering\Entities\Order|null
+	 */	
 	public function getBuyerOrder(BuyerContract $buyer, $orderId): ?Order 
 	{
 		$asker = Buyer::clientCopy($buyer);
@@ -78,12 +92,74 @@ class Ordering implements OrderingContract
 		return $order;
 	}
 
+	/**
+	 * Get a list of all buyer's orders
+	* (Incomplete Implementation)
+	 * 
+	 * @param  Fixme\Ordering\Contracts\Client\Buyer  $buyer
+	 * @param  mixed|null $args
+	 * @return Fixme\Ordering\Entities\Collections\OrdersCollection
+	 */
 	public function getBuyerOrders(BuyerContract $buyer, $args = null): ?OrdersCollection 
 	{
 		$asker = Buyer::clientCopy($buyer);
-		// $orders = OrderRepository::listForBuyer($buyer);
+		$orders = OrderRepository::listForBuyer($asker);
 		return $orders;
 	}
+
+	/**
+	 * Returns seller Order
+	 * (Incomplete Implementation)
+	 * 
+	 * @param  Fixme\Ordering\Contracts\Client\Seller $seller
+	 * @param  int $orderId
+	 * @return Fixme\Ordering\Entities\Order|null
+	 */
+	public function getSellerOrder(SellerContract $seller, $orderId): ?Order
+	{
+		$asker = Buyer::clientCopy($buyer);
+		$orders = OrderRepository::listForBuyer($asker);
+		return $orders;
+	}
+
+	/**
+	 * Get a list of all seller's orders
+	 * (Incomplete Implementation)
+	 * 
+	 * @param  Fixme\Ordering\Contracts\Client\Seller $seller
+	 * @param  mixed|null $args 
+	 * @return Fixme\Ordering\Entities\Collections\OrderCollection
+	 */
+	public function getSellerOrders(SellerContract $seller, $args = null): OrdersCollection
+	{
+
+	}
+
+	/**
+	 * sets a new state object on the order, and updating the order status accordingly
+	 * (Incomplete Implementation)
+	 * 
+	 * @param int $orderId
+	 * @param string $status  must exists in Fixme\Ordering\Entities\Values\Status::getStatuses()
+	 * @return Fixme\Ordering\Contracts\Entities\OrderState|null 
+	 */
+	public function setOrderState($orderId, string $status): ?OrderState
+	{
+
+	}
+
+	/**
+	 * deletes an order
+	 * (Incomplete Implementation)
+	 * 
+	 * @param  int $orderId
+	 * @return bool $result of the delete operation
+	 */
+	public function delete($orderId): bool
+	{
+
+	}
+
 }
 
 
