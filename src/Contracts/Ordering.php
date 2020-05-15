@@ -6,7 +6,8 @@ use Fixme\Ordering\Contracts\Client\AddressInfo;
 use Fixme\Ordering\Contracts\Client\Buyer;
 use Fixme\Ordering\Contracts\Client\Item;
 use Fixme\Ordering\Contracts\Client\Seller;
-use Fixme\Ordering\Contracts\Entities\OrderState;
+
+use Fixme\Ordering\Entities\OrderState;
 use Fixme\Ordering\Entities\Collections\OrdersCollection;
 use Fixme\Ordering\Entities\Order;
 
