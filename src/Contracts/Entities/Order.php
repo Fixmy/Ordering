@@ -27,7 +27,7 @@ interface Order extends Arrayable
 	public function getBuyer(): Buyer;
 
 	/**
-	 * [getSeller description]
+	 * returns the seller of the order
 	 * 
 	 * @return Fixme\Ordering\Entities\Seller [description]
 	 */
@@ -71,4 +71,10 @@ interface Order extends Arrayable
 	 */
 	public function addState(OrderState $state, bool $activate = null): OrderStatesCollection;
 
+	/**
+	 * to return the total price of all items
+	 * 
+	 * @return float
+	 */
+	public function getItemsPrice(): float
 }

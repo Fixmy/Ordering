@@ -45,6 +45,11 @@ class Order implements OrderContract
     	}
     }
 
+    /**
+     * return the identifier of the order
+     * 
+     * @return int|null
+     */
     public function getId(): int
     {
     	return $this->id;
@@ -62,39 +67,64 @@ class Order implements OrderContract
     	$this->id = $id;
     }
 
+    /**
+     * returns the buyer of the order
+     * 
+     * @return Buyer
+     */
 	public function getBuyer(): Buyer 
 	{
 		return $this->buyer;
 	}
 
+	/**
+	 * returns the seller of the order
+	 * 
+	 * @return Seller
+	 */
 	public function getSeller(): Seller 
 	{
 		return $this->seller;
 	}
 
+	/**
+	 * returns a Collection of OrderItems that are related to 
+	 * the order
+	 * 
+	 * @return ItemsCollection
+	 */
 	public function getItems(): ItemsCollection 
 	{
 		return $this->items;
 	}
-
+	/**
+	 * returns the address for order delivery
+	 * 
+	 * @return AddressInfo
+	 */
 	public function getAddressInfo(): AddressInfo 
 	{
 		return $this->addressInfo;
 	}
 
+	/**
+	 *  returns the currency that is used for the order price
+	 * 
+	 * @return string
+	 */
 	public function getCurrency(): string
 	{
 		return $this->currency;
 	}
 
+	/**
+	 * returns a list of orderStates
+	 * 
+	 * @return OrderStatesCollection
+	 */
 	public function getStates(): OrderStatesCollection
 	{
 		return $this->states;
-	}
-
-	public function getItemsPrice()
-	{
-		return $this->getItems()->getTotalItemsPrice();
 	}
 
 	/**
@@ -108,6 +138,17 @@ class Order implements OrderContract
 	public function addState(OrderState $state, bool $activate = null): OrderStatesCollection
 	{
 		return $this->states->push($state);
+	}
+
+	/**
+	 * calls OrderItemsCollection::getTotalItemsPrice() on $items
+	 * to return the total price of all items
+	 * 
+	 * @return float
+	 */
+	public function getItemsPrice(): float
+	{
+		return $this->getItems()->getTotalItemsPrice();
 	}
 
 	public function toArray()
