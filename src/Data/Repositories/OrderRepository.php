@@ -117,9 +117,57 @@ class OrderRepository implements OrderRepositoryInterface
      */
     public static function listForBuyer(Buyer $buyer): OrdersCollection
     {
-    	return (new OrdersCollection());
+    	$orders = OrderModel::with(
+    		'buyer',
+    		'seller',
+    		'items',
+    		'states',
+    		'address'
+    	)->where([
+    		'buyer_id' => $buyer->retrieveIdentifierValue(),
+    		'buyer_type' => $buyer->retrieveClassType(),
+    	])->get();
+    	if($orders) {
+    		$ordersCollection = new OrdersCollection( 
+    			$orders->map(function($orderModel) {
+    				return self::orderTransformer($orderModel);
+    			})
+    		);
+    		return $ordersCollection;
+    	} else {	
+    		return (new OrdersCollection());
+    	}
     }
 
+    /**
+     * get the orders for a seller
+     * 
+     * @param Seller $seller
+     * @return OrdersCollection
+     */
+    public static function listForSeller(Seller $seller): OrdersCollection 
+    {
+    	$orders = OrderModel::with(
+    		'buyer',
+    		'seller',
+    		'items',
+    		'states',
+    		'address'
+    	)->where([
+    		'seller_id' => $seller->retrieveIdentifierValue(),
+    		'seller_type' => $seller->retrieveClassType(),
+    	])->get();
+    	if($orders) {
+    		$ordersCollection = new OrdersCollection( 
+    			$orders->map(function($orderModel) {
+    				return self::orderTransformer($orderModel);
+    			})
+    		);
+    		return $ordersCollection;
+    	} else {	
+    		return (new OrdersCollection());
+    	}
+    }
     /**
      * Transforms an Order Model to an Entity
      * 
@@ -141,7 +189,6 @@ class OrderRepository implements OrderRepositoryInterface
 		$orderBuyer	= Buyer::clientCopy($orderModel->buyer);
 		$orderSeller = Seller::clientCopy($orderModel->seller);
 		$addressInfo = new AddressInfo($orderModel->address->phone_number, $orderModel->address->address_line);
-
 		$orderStatesCollection = new OrderStatesCollection(
 			$orderModel->states->map(function($stateModel) {
 				$issuer     = new Polymorph($stateModel->issuer_type, $stateModel->issuer_id, $stateModel->issuer_key);

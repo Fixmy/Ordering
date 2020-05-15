@@ -3,13 +3,14 @@
 namespace Fixme\Ordering\Data\Interfaces;
 
 use Fixme\Ordering\Entities\Buyer;
+use Fixme\Ordering\Entities\Seller;
 use Fixme\Ordering\Entities\Collections\OrdersCollection;
 use Fixme\Ordering\Entities\Order;
 
 interface OrderRepository
 {
 	/**
-	 * Undocumented function
+	 * Saves Persists an Order
 	 *
 	 * @param Order $order
 	 * @return boolean
@@ -20,15 +21,23 @@ interface OrderRepository
 	 * finds an order by Id
 	 *
 	 * @param int $orderId
-	 * @return Fixme\Ordering\Entities\Order|null
+	 * @return Order|null
 	 */
 	public static function find($orderId): ?Order;
 
 	/**
 	 * get orders for a buyer
 	 *
-	 * @param Fixme\Ordering\Entities\Buyer $buyer
-	 * @return Fixme\Ordering\Entities\Collections\OrdersCollection
+	 * @param Buyer $buyer
+	 * @return OrdersCollection
 	 */
 	public static function listForBuyer(Buyer $buyer): OrdersCollection;
+
+	/**
+	 * get the orders for a seller
+	 * 
+	 * @param Seller $seller
+	 * @return OrdersCollection
+	 */
+	public static function listForSeller(Seller $seller): OrdersCollection;
 }
