@@ -42,15 +42,27 @@ class Ordering implements OrderingContract
 	public function test() 
 	{	
 		print('hello from ordering');
-		// $beneficiary = Beneficiary::all()->random(); //	device_id: string
-		// $shop        = Shop::all()->random(); // 	shop_id: int
-		// $items       = Item::all()->random(3)->map(function($item) {
-		// 	return $item->toOrderItem($quantity = rand(1, 3), $price = rand(100, 500));
-		// });
-		// $address     = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
-		// $order = $this->request($beneficiary, $shop, $address, ...$items);
-		// $result = $this->getBuyerOrder($beneficiary, $order->getId());
-		// return $result->toArray();
+		$buyer  = Beneficiary::all()->random();
+		$seller = Shop::all()->random(); 
+		$items  = Item::all()->random(3)->map(function($item) {
+			return $item->toOrderItem($quantity = rand(1, 3), $price = rand(100, 500));
+		});
+		$address = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
+
+		$order = $this->request($buyer, $seller, $address, ...$items);
+		$orderId = $order->getId();		
+		$getBuyerOrder = $this->getBuyerOrder($buyer, $orderId);
+		$getBuyerOrders = $this->getBuyerOrders($buyer);
+		$getSellerOrder = $this->getSellerOrder($seller, $orderId);
+		$getSellerOrders = $this->getSellerOrders($seller);
+		
+		dd(
+			$getBuyerOrder->toArray(),
+			$getBuyerOrders->toArray(),
+			$getSellerOrder->toArray(),
+			$getSellerOrders->toArray()
+		);
+	
 	}
 
 	/**
@@ -100,7 +112,7 @@ class Ordering implements OrderingContract
 	 * @param  mixed|null $args
 	 * @return Fixme\Ordering\Entities\Collections\OrdersCollection
 	 */
-	public function getBuyerOrders(BuyerContract $buyer, $args = null): ?OrdersCollection 
+	public function getBuyerOrders(BuyerContract $buyer, $args = null): OrdersCollection 
 	{
 		$asker = Buyer::clientCopy($buyer);
 		$orders = OrderRepository::listForBuyer($asker);
@@ -117,9 +129,9 @@ class Ordering implements OrderingContract
 	 */
 	public function getSellerOrder(SellerContract $seller, $orderId): ?Order
 	{
-		$asker = Buyer::clientCopy($buyer);
-		$orders = OrderRepository::listForBuyer($asker);
-		return $orders;
+		$asker = Seller::clientCopy($seller);
+		$order = OrderRepository::find($orderId);
+		return $order;
 	}
 
 	/**
@@ -132,7 +144,9 @@ class Ordering implements OrderingContract
 	 */
 	public function getSellerOrders(SellerContract $seller, $args = null): OrdersCollection
 	{
-
+		$asker = Seller::clientCopy($seller);
+		$orders = OrderRepository::listForSeller($asker);
+		return $orders;
 	}
 
 	/**
