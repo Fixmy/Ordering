@@ -3,7 +3,6 @@
 namespace Fixme\Ordering\Entities;
 
 use Fixme\Ordering\Contracts\Entities\Order as OrderContract;
-use Fixme\Ordering\Contracts\Entities\Values\Status;
 use Fixme\Ordering\Entities\AddressInfo;
 use Fixme\Ordering\Entities\Collections\ItemsCollection;
 use Fixme\Ordering\Entities\Collections\OrderStatesCollection;
@@ -93,6 +92,11 @@ class Order implements OrderContract
 		return $this->states;
 	}
 
+	public function getItemsPrice()
+	{
+		return $this->getItems()->getTotalItemsPrice();
+	}
+
 	/**
 	 * [addState description]
 	 * 
@@ -106,15 +110,16 @@ class Order implements OrderContract
 		return $this->states->push($state);
 	}
 
-	public function toArray() 
+	public function toArray()
 	{
 		return [
-			'id'     => $this->getId(),
-			'buyer'  => $this->buyer->toArray(),
-			'seller' => $this->seller->toArray(),
-			'items'  => $this->items->toArray(),
+			'id'          => $this->getId(),
+			'buyer'       => $this->buyer->toArray(),
+			'seller'      => $this->seller->toArray(),
+			'items'       => $this->items->toArray(),
 			'addressInfo' => $this->addressInfo->toArray(),
-			'states' => $this->states->toArray(),
+			'states'      => $this->states->toArray(),
+			'itemsPrice'  => $this->getItemsPrice()
 		];
 	}
 

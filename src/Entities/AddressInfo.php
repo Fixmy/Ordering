@@ -3,8 +3,9 @@
 namespace Fixme\Ordering\Entities;
 
 use Fixme\Ordering\Contracts\Client\AddressInfo as AddressInfoContract;
+use Fixme\Ordering\Contracts\Support\Arrayable;
 
-class AddressInfo implements AddressInfoContract
+class AddressInfo implements AddressInfoContract, Arrayable
 {
 	protected $phone;
 	protected $addressLine;

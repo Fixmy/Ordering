@@ -2,8 +2,8 @@
 
 namespace Fixme\Ordering\Entities;
 
-use Fixme\Ordering\Contracts\Entities\Seller as SellerContract;
 use Fixme\Ordering\Contracts\Client\Seller as ClientSellerContract;
+use Fixme\Ordering\Contracts\Entities\Seller as SellerContract;
 use Fixme\Ordering\Traits\ActAsSeller;
 
 class Seller implements SellerContract

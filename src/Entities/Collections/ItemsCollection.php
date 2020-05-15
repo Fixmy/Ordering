@@ -7,9 +7,17 @@ use \Illuminate\Support\Collection;
 
 class ItemsCollection extends Collection implements ItemsCollectionContract
 {
-    public function getTotalBill() : float
+	/**
+	 * returns the Sum of all the items prices
+	 * by calling getPrice() on each price
+	 * 
+	 * @return float
+	 */
+    public function getTotalItemsPrice() : float
     {
-    	return 123;
+    	return array_reduce($this->items, function($v, $item) {
+    	    return $v + $item->getLineItemPrice();
+    	}, 0);
     }
 
     /**

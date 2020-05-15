@@ -4,12 +4,20 @@ namespace Fixme\Ordering\Entities;
 
 use Fixme\Ordering\Contracts\Entities\Item as ItemContract;
 use Fixme\Ordering\Traits\ActAsItem;
-use Illuminate\Contracts\Support\Arrayable;
 
-class Item implements ItemContract, Arrayable
+class Item implements ItemContract
 {	
  	use ActAsItem; 
 
+ 	protected $total;
+
+ 	/**
+ 	 * instantiate a new  Item
+ 	 * 
+ 	 * @param int    $quantity
+ 	 * @param float  $unitPrice
+ 	 * @param string
+ 	 */
     public function __construct(int $quantity, float $unitPrice, string $description)
     {
     	$this->setQuantity($quantity);
@@ -20,10 +28,10 @@ class Item implements ItemContract, Arrayable
     public function toArray() 
     {
     	$orderItem = [
+    		'description' => $this->getItemOrderDescription(),
     		'quantity' => $this->getQuantity(),
     		'unitPrice' => $this->getUnitPrice(),
-    		'total' => $this->getLineItemPrice(),
-    		'description' => $this->getItemOrderDescription(),
+    		'price' => $this->getLineItemPrice(),
     	];
     	return array_merge($orderItem, $this->polymorphsToArray());
     }

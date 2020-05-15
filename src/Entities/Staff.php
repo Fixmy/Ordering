@@ -7,4 +7,9 @@ class Staff
     public function __construct()
     {
     }
+
+    public function toArray() 
+    {
+    	return $this->polymorphsToArray();
+    }
 }

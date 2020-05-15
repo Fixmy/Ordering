@@ -40,7 +40,7 @@ interface Ordering
 
 	/**
 	 * Get a list of all buyer's orders
-	* (Incomplete Implementation)
+	 * (Incomplete Implementation for args)
 	 * 
 	 * @param  Fixme\Ordering\Contracts\Client\Buyer  $buyer
 	 * @param  mixed|null $args
@@ -50,7 +50,7 @@ interface Ordering
 	
 	/**
 	 * Returns seller Order
-	 * (Incomplete Implementation)
+	 * (Missing Implementation - Integrity)
 	 * 
 	 * @param  Fixme\Ordering\Contracts\Client\Seller $seller
 	 * @param  int $orderId
@@ -60,7 +60,7 @@ interface Ordering
 	
 	/**
 	 * Get a list of all seller's orders
-	 * (Incomplete Implementation)
+	 * (Incomplete Implementation for args)
 	 * 
 	 * @param  Fixme\Ordering\Contracts\Client\Seller $seller
 	 * @param  mixed|null $args 

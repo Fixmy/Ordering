@@ -50,17 +50,19 @@ class Ordering implements OrderingContract
 		$address = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
 
 		$order = $this->request($buyer, $seller, $address, ...$items);
+
+		return $order;
 		$orderId = $order->getId();		
 		$getBuyerOrder = $this->getBuyerOrder($buyer, $orderId);
-		$getBuyerOrders = $this->getBuyerOrders($buyer);
-		$getSellerOrder = $this->getSellerOrder($seller, $orderId);
-		$getSellerOrders = $this->getSellerOrders($seller);
+		// $getBuyerOrders = $this->getBuyerOrders($buyer);
+		// $getSellerOrder = $this->getSellerOrder($seller, $orderId);
+		// $getSellerOrders = $this->getSellerOrders($seller);
 		
 		dd(
-			$getBuyerOrder->toArray(),
-			$getBuyerOrders->toArray(),
-			$getSellerOrder->toArray(),
-			$getSellerOrders->toArray()
+			$getBuyerOrder->toArray()
+			// $getBuyerOrders->toArray(),
+			// $getSellerOrder->toArray(),
+			// $getSellerOrders->toArray()
 		);
 	
 	}

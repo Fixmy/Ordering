@@ -2,15 +2,15 @@
 
 namespace Fixme\Ordering\Contracts\Entities;
 
-use Fixme\Ordering\Contracts\Entities\Values\Status;
+use Fixme\Ordering\Contracts\Support\Arrayable;
 use Fixme\Ordering\Entities\AddressInfo;
 use Fixme\Ordering\Entities\Buyer;
-use Fixme\Ordering\Entities\OrderState;
 use Fixme\Ordering\Entities\Collections\ItemsCollection;
 use Fixme\Ordering\Entities\Collections\OrderStatesCollection;
+use Fixme\Ordering\Entities\OrderState;
 use Fixme\Ordering\Entities\Seller;
 
-interface Order 
+interface Order extends Arrayable
 {
 	/**
 	 * return the identifier of the order

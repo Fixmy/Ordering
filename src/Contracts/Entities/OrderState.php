@@ -3,10 +3,11 @@
 namespace Fixme\Ordering\Contracts\Entities;
 
 use Fixme\Ordering\Contracts\Client\Polymorphs;
+use Fixme\Ordering\Contracts\Support\Arrayable;
 use Fixme\Ordering\Entities\Order;
 use Fixme\Ordering\Entities\Values\Status;
 
-interface OrderState 
+interface OrderState extends Arrayable 
 {
 	/**
 	 * [getStatus description]
