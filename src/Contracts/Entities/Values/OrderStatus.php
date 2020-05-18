@@ -2,6 +2,9 @@
 
 namespace  Fixme\Ordering\Contracts\Entities\Values;
 
+use Fixme\Ordering\Entities\OrderState;
+use Fixme\Ordering\Entities\Values\OrderStatus;
+
 interface OrderStatus 
 {
 	/**
@@ -25,4 +28,12 @@ interface OrderStatus
 	 * @return void
 	 */
 	public function setType(string $type);
+
+	/**
+	 * matches a state's status and resolves the relevant order status
+	 * 
+	 * @param  OrderState $state
+	 * @return OrderStatus
+	 */
+	public static function matchStateStatus(OrderState $state): OrderStatus;
 }
