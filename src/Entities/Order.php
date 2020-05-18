@@ -7,6 +7,8 @@ use Fixme\Ordering\Entities\AddressInfo;
 use Fixme\Ordering\Entities\Collections\ItemsCollection;
 use Fixme\Ordering\Entities\Collections\OrderStatesCollection;
 use Fixme\Ordering\Entities\Values\Currency;
+use Fixme\Ordering\Entities\Values\OrderStatus;
+use Fixme\Ordering\Entities\Values\Status;
 
 class Order implements OrderContract
 {
@@ -18,6 +20,7 @@ class Order implements OrderContract
 	private $id;
 	protected $states;
 	protected $createdAt;
+	protected $status;
 
 	/**
 	 * Creates a new Order Class Entity
@@ -47,8 +50,11 @@ class Order implements OrderContract
     		$this->states = $states;
     	} else {
     		$this->states = new OrderStatesCollection(); //initializing a new collection
+    		$state = new OrderState(Status::REQUESTED, $this->buyer, $this->seller);
+    		$this->addState($state);
     	}
     	$this->createdAt = new \DateTime();
+    	$this->resolveStatus();
     }
 
     /**
@@ -167,6 +173,15 @@ class Order implements OrderContract
 		return $this->createdAt;
 	}
 
+	/**
+	 * @return Status [description]
+	 */
+	public function resolveStatus(): OrderStatus 
+	{
+		$currentState = $this->states->getActiveState();
+		return OrderStatus::matchStateStatus($currentState);
+	}
+
 	public function toArray()
 	{
 		return [
@@ -179,7 +194,7 @@ class Order implements OrderContract
 			'itemsPrice'  => $this->getItemsPrice(),
 			'currency'    => $this->currency->getCode(),
 			'createdAt'   => $this->createdAt,
+			'status'      => $this->resolveStatus()->getType(),
 		];
 	}
-
 }

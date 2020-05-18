@@ -2,15 +2,20 @@
 
 namespace Fixme\Ordering\Entities\Collections;
 
-use Fixme\Ordering\Entities\Values\Status;
-use \Illuminate\Support\Collection;
 use Fixme\Ordering\Contracts\Entities\Collections\OrderStatesCollection as Contract;
+use Fixme\Ordering\Entities\OrderState;
+use \Illuminate\Support\Collection;
 
 class OrderStatesCollection extends Collection implements Contract
 {
-    public function getActiveState(): Status
+    public function getActiveState(): OrderState
     {
-    	return (new Status());
+    	$sorted = $this->sortBy(function($item)
+    	{
+    	  return $item->getCreatedAt();
+    	});
+
+    	return $this->first();
     }
 
     /**

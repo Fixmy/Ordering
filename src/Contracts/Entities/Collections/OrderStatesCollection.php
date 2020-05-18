@@ -2,9 +2,9 @@
 
 namespace Fixme\Ordering\Contracts\Entities\Collections;
 
-use Fixme\Ordering\Entities\Values\Status;
+use Fixme\Ordering\Entities\OrderState;
 
 interface OrderStatesCollection
 {
-    public function getActiveState(): Status;
+    public function getActiveState(): OrderState;
 }

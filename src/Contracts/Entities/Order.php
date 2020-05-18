@@ -10,6 +10,7 @@ use Fixme\Ordering\Entities\Collections\OrderStatesCollection;
 use Fixme\Ordering\Entities\OrderState;
 use Fixme\Ordering\Entities\Seller;
 use Fixme\Ordering\Entities\Values\Currency;
+use Fixme\Ordering\Entities\Values\OrderStatus;
 
 interface Order extends Arrayable
 {
@@ -93,4 +94,11 @@ interface Order extends Arrayable
 	 * @return \Datetime
 	 */
 	public function getCreatedAt(): \Datetime;
+
+	/**
+	 * return the status of the Order based on the state
+	 * 
+	 * @return Fixme/Ordering/Entities/Values/OrderStatus
+	 */
+	public function resolveStatus(): OrderStatus;
 }

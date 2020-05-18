@@ -81,8 +81,6 @@ class Ordering implements OrderingContract
 		$orderSeller = Seller::clientCopy($seller);
 		$orderCurrency = new Currency($currency);
 		$order	= new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection, $orderCurrency);
-		$state = new OrderState(Status::REQUESTED, $buyer, $seller);
-		$order->addState($state);
 		OrderRepository::save($order);
 		return $order;
 	}
