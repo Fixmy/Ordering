@@ -1,5 +1,6 @@
 <?php
 
+use Fixme\Ordering\Entities\Values\OrderStatus;
 use Fixme\Ordering\Entities\Values\Status;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -33,6 +34,7 @@ class CreateOrdersTable extends Migration
             $table->string('currency');
             $table->string('currency_value')->nullable();
             $table->string('notes')->nullable();
+            $table->enum('status', array_values(OrderStatus::getStatuses()));
             $table->timestamps();
 			$table->softDeletes();
         });
@@ -55,9 +57,9 @@ class CreateOrdersTable extends Migration
             $table->integer('issuer_id')->unsigned();
             $table->string('issuer_type');
             $table->string('issuer_key');
-            $table->integer('maintainer_id')->unsigned();
-            $table->string('maintainer_type');
-            $table->string('maintainer_key');
+            $table->integer('maintainer_id')->unsigned()->nullable();
+            $table->string('maintainer_type')->nullable();
+            $table->string('maintainer_key')->nullable();
             $table->enum('status', array_values(Status::getStatuses()));
             $table->timestamps();
 			$table->softDeletes();
