@@ -150,14 +150,14 @@ class Ordering implements OrderingContract
 	 * 
 	 * @param int $orderId
 	 * @param string $status  must exists in Fixme\Ordering\Entities\Values\Status::getStatuses()
-	 * @return Fixme\Ordering\Contracts\Entities\OrderState|null 
+	 * @return bool 
 	 */
-	public function setOrderState($orderId, string $status, $issuer, $maintainer = null): ?OrderState
+	public function setOrderState($orderId, string $status, $issuer, $maintainer = null): bool
 	{
 		$order = OrderRepository::find($orderId);
 		$state = new OrderState($status, $issuer, $maintainer);
 		$order->addState($state);
-		OrderRepository::save($order);
+		return OrderRepository::save($order);
 	}
 
 	/**
