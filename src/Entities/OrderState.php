@@ -11,6 +11,7 @@ class OrderState implements StateContract
 	protected $status;
 	private $issuer;
 	private $maintainer;
+	protected $createdAt;
 
 	/**
 	 * 
@@ -23,6 +24,7 @@ class OrderState implements StateContract
     	$this->status = new Status($status);
     	$this->issuer = $issuer;
     	$this->maintainer = $maintainer;
+    	$this->createdAt = new \DateTime();
     }
 
     /**
@@ -77,12 +79,23 @@ class OrderState implements StateContract
     	$this->maintainer = $maintainer;
     }
 
+    public function setCreationDate(\Datetime $date) 
+    {
+    	$this->createdAt = $date;
+    }
+
+    public function getCreatedAt(): \Datetime
+    {
+    	return $this->createdAt;
+    }
+
 	public function toArray() 
     {
     	return [
-    		'maintainer' => $this->maintainer ? $this->maintainer->polymorphsToArray() : null,
-    		'issuer' => $this->issuer->polymorphsToArray(),
-    		'status' => $this->status->getType(),
+			'maintainer' => $this->maintainer ? $this->maintainer->polymorphsToArray() : null,
+			'issuer'     => $this->issuer->polymorphsToArray(),
+			'status'     => $this->status->getType(),
+			'createdAt'  => $this->createdAt,
     	];
     }
 }

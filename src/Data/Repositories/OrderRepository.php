@@ -2,11 +2,17 @@
 
 namespace Fixme\Ordering\Data\Repositories;
 
+/**
+ *  Data Models
+ */
 use Fixme\Ordering\Data\Interfaces\OrderRepository as OrderRepositoryInterface;
 use Fixme\Ordering\Data\Models\Order as OrderModel;
 use Fixme\Ordering\Data\Models\OrderAddress;
 use Fixme\Ordering\Data\Models\OrderItem;
 use Fixme\Ordering\Data\Models\OrderState as StateModel;
+/**
+ * Entities
+ */
 use Fixme\Ordering\Entities\AddressInfo;
 use Fixme\Ordering\Entities\Buyer;
 use Fixme\Ordering\Entities\Collections\ItemsCollection;
@@ -170,6 +176,7 @@ class OrderRepository implements OrderRepositoryInterface
     		return (new OrdersCollection());
     	}
     }
+
     /**
      * Transforms an Order Model to an Entity
      * 
@@ -197,6 +204,7 @@ class OrderRepository implements OrderRepositoryInterface
 				$issuer     = new Polymorph($stateModel->issuer_type, $stateModel->issuer_id, $stateModel->issuer_key);
 				$maintainer = new Polymorph($stateModel->maintainer_type, $stateModel->maintainer_id, $stateModel->maintainer_key);
 				$orderState = new OrderState($stateModel->status, $issuer, $maintainer);
+				$orderState->setCreationDate($stateModel->created_at);
 				return $orderState;
 			})
 		);

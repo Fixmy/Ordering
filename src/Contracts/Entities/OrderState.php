@@ -29,4 +29,19 @@ interface OrderState extends Arrayable
 	 * @return Polymorphs $maintainer
 	 */
 	public function getMaintainer(): ?Polymorphs;
+
+	/**
+	 * set the creation date proprety on the Order State! 
+	 * should be set as protected!
+	 * 
+	 * @param \Datetime $date
+	 */
+	public function setCreationDate(\Datetime $date);
+
+	/**
+	 * get the creation date of the order state
+	 * 
+	 * @return \Datetime
+	 */
+	public function getCreatedAt(): \Datetime;
 }

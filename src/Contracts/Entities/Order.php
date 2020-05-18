@@ -78,4 +78,19 @@ interface Order extends Arrayable
 	 * @return float
 	 */
 	public function getItemsPrice(): float;
+
+	/**
+	 * set the creation date proprety on the order! 
+	 * should be set as protected!
+	 * 
+	 * @param \Datetime $date
+	 */
+	public function setCreationDate(\Datetime $date);
+
+	/**
+	 * get the creation date of the order
+	 * 
+	 * @return \Datetime
+	 */
+	public function getCreatedAt(): \Datetime;
 }
