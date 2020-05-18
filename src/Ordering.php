@@ -35,24 +35,24 @@ class Ordering implements OrderingContract
 	{	
 		print('hello from ordering');
 		$buyer  = Beneficiary::all()->random();
-		$seller = Shop::all()->random(); 
-		$items  = Item::all()->random(3)->map(function($item) {
-			return $item->toOrderItem($quantity = rand(1, 3), $price = rand(100, 500));
-		});
-		$address = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
+		// $seller = Shop::all()->random(); 
+		// $items  = Item::all()->random(3)->map(function($item) {
+		// 	return $item->toOrderItem($quantity = rand(1, 3), $price = rand(100, 500));
+		// });
+		// $address = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
 
-		$order = $this->request($buyer, $seller, $address, 'LBP', ...$items);
+		// $order = $this->request($buyer, $seller, $address, 'LBP', ...$items);
 
-		return $order;
-		$orderId = $order->getId();		
-		$getBuyerOrder = $this->getBuyerOrder($buyer, $orderId);
-		// $getBuyerOrders = $this->getBuyerOrders($buyer);
+		// return $order;
+		// $orderId = $order->getId();		
+		// $getBuyerOrder = $this->getBuyerOrder($buyer, $orderId);
+		$getBuyerOrders = $this->getBuyerOrders($buyer);
 		// $getSellerOrder = $this->getSellerOrder($seller, $orderId);
 		// $getSellerOrders = $this->getSellerOrders($seller);
 		
 		dd(
-			$getBuyerOrder->toArray()
-			// $getBuyerOrders->toArray(),
+			// $getBuyerOrder->toArray()
+			$getBuyerOrders->toArray()
 			// $getSellerOrder->toArray(),
 			// $getSellerOrders->toArray()
 		);
@@ -154,7 +154,10 @@ class Ordering implements OrderingContract
 	 */
 	public function setOrderState($orderId, string $status, $issuer, $maintainer = null): ?OrderState
 	{
-
+		$order = OrderRepository::find($orderId);
+		$state = new OrderState($status, $issuer, $maintainer);
+		$order->addState($state);
+		OrderRepository::save($order);
 	}
 
 	/**

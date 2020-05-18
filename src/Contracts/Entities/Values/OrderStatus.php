@@ -3,7 +3,6 @@
 namespace  Fixme\Ordering\Contracts\Entities\Values;
 
 use Fixme\Ordering\Entities\OrderState;
-use Fixme\Ordering\Entities\Values\OrderStatus;
 
 interface OrderStatus 
 {

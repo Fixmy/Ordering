@@ -62,7 +62,7 @@ class Order implements OrderContract
      * 
      * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
     	return $this->id;
     }
@@ -163,11 +163,22 @@ class Order implements OrderContract
 		return $this->getItems()->getTotalItemsPrice();
 	}
 
+	/**
+	 * set the creation date proprety on the order! 
+	 * should be set as protected!
+	 * 
+	 * @param \Datetime $date
+	 */
 	public function setCreationDate(\Datetime $date) 
 	{
 		$this->createdAt = $date;
 	}
 
+	/**
+	 * get the creation date of the order
+	 * 
+	 * @return \Datetime
+	 */
 	public function getCreatedAt(): \Datetime
 	{
 		return $this->createdAt;

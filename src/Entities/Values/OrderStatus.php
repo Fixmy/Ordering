@@ -48,7 +48,7 @@ class OrderStatus implements OrderStatusContract
 		return in_array($type, $this->getStatuses());
 	}
 
-	public static function matchStateStatus(OrderState $state): OrderStatus
+	public static function matchStateStatus(OrderState $state): OrderStatusContract
 	{	
 		switch($state->getStatus()->getType())
 		{
@@ -78,6 +78,4 @@ class OrderStatus implements OrderStatusContract
 				return (new static(self::CLOSED));
 		}
 	}
-
-
 }

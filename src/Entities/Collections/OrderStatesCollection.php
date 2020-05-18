@@ -15,7 +15,7 @@ class OrderStatesCollection extends Collection implements Contract
     	  return $item->getCreatedAt();
     	});
 
-    	return $this->first();
+    	return $this->last();
     }
 
     /**
