@@ -36,6 +36,13 @@ class OrderRepository implements OrderRepositoryInterface
 	 */
     public static function save(Order &$order): bool
     {
+    	if($order->getId()) 
+    	{
+    		self::addOrderState($order); // this is the only thing that currently requires updates
+    		$orderModel = OrderModel::find($order->getId());
+    		$orderModel->status = $order->resolveStatus()->getType();
+    		return $orderModel->save();
+    	}
     	$orderModel = new OrderModel();
 		$orderModel->buyer_id    = $order->getBuyer()->retrieveIdentifierValue();
 		$orderModel->buyer_type  = $order->getBuyer()->retrieveClassType();
@@ -44,7 +51,8 @@ class OrderRepository implements OrderRepositoryInterface
 		$orderModel->seller_type = $order->getSeller()->retrieveClassType();
 		$orderModel->seller_key  = $order->getSeller()->retrieveIdentifierKey();
 		$orderModel->currency    = $order->getCurrency()->getCode();
-		$orderModel->created_at   = $order->getCreatedAt();
+		$orderModel->created_at  = $order->getCreatedAt();
+		$orderModel->status = $order->resolveStatus()->getType();
 		$orderModel->save();
 		///////////////////////////////
 		$order->setId($orderModel->id);
@@ -73,20 +81,8 @@ class OrderRepository implements OrderRepositoryInterface
 		]);
 		$orderModel->address()->save($orderAddress);
 
-		$orderStates = $order->getStates()->map(function($state) use ($orderModel) {
-			$orderItem = [
-				'order_id'        => $orderModel->id,
-				'issuer_type'     => $state->getIssuer()->retrieveClassType(),
-				'issuer_id'       => $state->getIssuer()->retrieveIdentifierValue(),
-				'issuer_key'       => $state->getIssuer()->retrieveIdentifierKey(),
-				'maintainer_type' => $state->getMaintainer()->retrieveClassType(),
-				'maintainer_id'   => $state->getMaintainer()->retrieveIdentifierValue(),
-				'maintainer_key'  => $state->getMaintainer()->retrieveIdentifierKey(),
-				'status'          => $state->getStatus()->getType(),
-				'created_at'      => new \DateTime(),
-				'updated_at'      => new \DateTime(),
-			];
-			return $orderItem;
+		$orderStates = $order->getStates()->map(function($state) use ($order) {
+			return self::prepareOrderStateModelData($order, $state);
 		});
 
 		StateModel::insert($orderStates->toArray());
@@ -177,6 +173,31 @@ class OrderRepository implements OrderRepositoryInterface
     	}
     }
 
+    private static function addOrderState(Order &$order): bool
+    {
+		$orderState = $order->getStates()->getActiveState();
+		$stateData = self::prepareOrderStateModelData($order, $orderState);
+		StateModel::insert([$stateData]);
+		return true;
+    }
+
+    private static function prepareOrderStateModelData(Order $order, OrderState $state): array
+    {
+    	$orderItem = [
+    		'order_id'        => $order->getId(),
+    		'issuer_type'     => $state->getIssuer()->retrieveClassType(),
+    		'issuer_id'       => $state->getIssuer()->retrieveIdentifierValue(),
+    		'issuer_key'      => $state->getIssuer()->retrieveIdentifierKey(),
+    		'maintainer_type' => $state->getMaintainer() ? $state->getMaintainer()->retrieveClassType() : null,
+    		'maintainer_id'   => $state->getMaintainer() ? $state->getMaintainer()->retrieveIdentifierValue() : null,
+    		'maintainer_key'  => $state->getMaintainer() ? $state->getMaintainer()->retrieveIdentifierKey() : null,
+    		'status'          => $state->getStatus()->getType(),
+    		'created_at'      => $state->getCreatedAt(),
+    		'updated_at'      => new \DateTime(),
+    	];
+    	return $orderItem;
+    }
+
     /**
      * Transforms an Order Model to an Entity
      * 
@@ -202,7 +223,11 @@ class OrderRepository implements OrderRepositoryInterface
 		$orderStatesCollection = new OrderStatesCollection(
 			$orderModel->states->map(function($stateModel) {
 				$issuer     = new Polymorph($stateModel->issuer_type, $stateModel->issuer_id, $stateModel->issuer_key);
-				$maintainer = new Polymorph($stateModel->maintainer_type, $stateModel->maintainer_id, $stateModel->maintainer_key);
+				if($stateModel->maintainer_type) {
+					$maintainer = new Polymorph($stateModel->maintainer_type, $stateModel->maintainer_id, $stateModel->maintainer_key);
+				} else {
+					$maintainer = null;
+				}
 				$orderState = new OrderState($stateModel->status, $issuer, $maintainer);
 				$orderState->setCreationDate($stateModel->created_at);
 				return $orderState;
@@ -214,5 +239,4 @@ class OrderRepository implements OrderRepositoryInterface
 		$orderEntity->setCreationDate($orderModel->created_at);
 		return $orderEntity;
     }
-
 }
