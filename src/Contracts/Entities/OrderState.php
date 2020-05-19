@@ -44,4 +44,18 @@ interface OrderState extends Arrayable
 	 * @return \Datetime
 	 */
 	public function getCreatedAt(): \Datetime;
+
+	/**
+	 * return state notes
+	 * 
+	 * @return string|null
+	 */
+	public function getNotes(): ?string; 
+
+	/**
+	 * set state notes
+	 * 
+	 * @param string $notes 
+	 */
+	public function setNotes(string $notes);
 }

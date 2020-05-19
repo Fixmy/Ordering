@@ -77,10 +77,11 @@ interface Ordering
 	 * @param int $orderId
 	 * @param string $status  must exists in Fixme\Ordering\Entities\Values\Status::getStatuses()
 	 * @param Polymorphs issuer 
+	 * @param string|null $snotes
 	 * @param Polymorphs|null maintainer 
 	 * @return bool
 	 */
-	public function setOrderState($orderId, string $status, $issuer, $maintainer = null): bool;
+	public function setOrderState(int $orderId, string $status, $issuer, string $notes = null, $maintainer = null): bool;
 
 	/**
 	 * deletes an order

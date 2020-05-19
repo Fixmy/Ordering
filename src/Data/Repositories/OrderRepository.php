@@ -192,6 +192,7 @@ class OrderRepository implements OrderRepositoryInterface
     		'maintainer_id'   => $state->getMaintainer() ? $state->getMaintainer()->retrieveIdentifierValue() : null,
     		'maintainer_key'  => $state->getMaintainer() ? $state->getMaintainer()->retrieveIdentifierKey() : null,
     		'status'          => $state->getStatus()->getType(),
+    		'notes'          => $state->getNotes(),
     		'created_at'      => $state->getCreatedAt(),
     		'updated_at'      => new \DateTime(),
     	];
@@ -228,7 +229,7 @@ class OrderRepository implements OrderRepositoryInterface
 				} else {
 					$maintainer = null;
 				}
-				$orderState = new OrderState($stateModel->status, $issuer, $maintainer);
+				$orderState = new OrderState($stateModel->status, $stateModel->notes, $issuer, $maintainer);
 				$orderState->setCreationDate($stateModel->created_at);
 				return $orderState;
 			})

@@ -60,6 +60,7 @@ class CreateOrdersTable extends Migration
             $table->integer('maintainer_id')->unsigned()->nullable();
             $table->string('maintainer_type')->nullable();
             $table->string('maintainer_key')->nullable();
+            $table->string('notes')->nullable();
             $table->enum('status', array_values(Status::getStatuses()));
             $table->timestamps();
 			$table->softDeletes();

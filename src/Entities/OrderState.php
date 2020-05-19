@@ -12,16 +12,19 @@ class OrderState implements StateContract
 	private $issuer;
 	private $maintainer;
 	protected $createdAt;
+	protected $notes;
 
 	/**
 	 * 
 	 * @param string          $status
-	 * @param Polymorphs|null $issuer  the entity that is creating this state
+	 * @param string|null          $notes
+	 * @param Polymorphs|null $issuer the entity that is creating this state
 	 * @param Polymorphs|null $maintainer 
 	 */
-    public function __construct(string $status, Polymorphs $issuer = null, Polymorphs $maintainer = null)
+    public function __construct(string $status, string $notes = null, Polymorphs $issuer = null, Polymorphs $maintainer = null)
     {
     	$this->status = new Status($status);
+    	$this->notes = $notes;
     	$this->issuer = $issuer;
     	$this->maintainer = $maintainer;
     	$this->createdAt = new \DateTime();
@@ -89,12 +92,24 @@ class OrderState implements StateContract
     	return $this->createdAt;
     }
 
+	public function getNotes(): string 
+	{
+		return $this->notes;
+	} 
+
+	public function setNotes(string $notes) 
+	{
+		$this->notes = $notes;
+	}
+
+
 	public function toArray() 
     {
     	return [
 			'maintainer' => $this->maintainer ? $this->maintainer->polymorphsToArray() : null,
 			'issuer'     => $this->issuer->polymorphsToArray(),
 			'status'     => $this->status->getType(),
+			'notes' 	 => $this->notes,
 			'createdAt'  => $this->createdAt,
     	];
     }
