@@ -50,7 +50,7 @@ class Order implements OrderContract
     		$this->states = $states;
     	} else {
     		$this->states = new OrderStatesCollection(); //initializing a new collection
-    		$state = new OrderState(Status::REQUESTED, $this->buyer, $this->seller);
+    		$state = new OrderState(Status::REQUESTED, null, $this->buyer, $this->seller);
     		$this->addState($state);
     	}
     	$this->createdAt = new \DateTime();

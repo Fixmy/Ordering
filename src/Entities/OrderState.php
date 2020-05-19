@@ -92,7 +92,7 @@ class OrderState implements StateContract
     	return $this->createdAt;
     }
 
-	public function getNotes(): string 
+	public function getNotes(): ?string 
 	{
 		return $this->notes;
 	} 

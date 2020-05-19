@@ -33,30 +33,26 @@ class Ordering implements OrderingContract
 	 */
 	public function test() 
 	{	
-		print('hello from ordering');
+		print_r('----------------------------------------------------------');
+		print_r('hello from ordering');
+		print_r('----------------------------------------------------------');
+		print_r('----------------------------------------------------------');
+		print_r('creating an order');
 		$buyer  = Beneficiary::all()->random();
-		// $seller = Shop::all()->random(); 
-		// $items  = Item::all()->random(3)->map(function($item) {
-		// 	return $item->toOrderItem($quantity = rand(1, 3), $price = rand(100, 500));
-		// });
-		// $address = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
-
-		// $order = $this->request($buyer, $seller, $address, 'LBP', ...$items);
-
-		// return $order;
-		// $orderId = $order->getId();		
-		// $getBuyerOrder = $this->getBuyerOrder($buyer, $orderId);
-		$getBuyerOrders = $this->getBuyerOrders($buyer);
-		// $getSellerOrder = $this->getSellerOrder($seller, $orderId);
-		// $getSellerOrders = $this->getSellerOrders($seller);
-		
-		dd(
-			// $getBuyerOrder->toArray()
-			$getBuyerOrders->toArray()
-			// $getSellerOrder->toArray(),
-			// $getSellerOrders->toArray()
-		);
-	
+		$seller = Shop::all()->random(); 
+		$items  = Item::all()->random(3)->map(function($item) {
+			return $item->toOrderItem($quantity = rand(1, 3), $price = rand(100, 500));
+		});
+		$address = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
+		$order = $this->request($buyer, $seller, $address, 'LBP', ...$items);
+		print_r('Order Created!');
+		print_r('----------------------------------------------------------');
+		print_r('----------------------------------------------------------');
+		print_r('Attempting adding a new state');
+		$this->setOrderState($order->getId(), Status::DISPATCHED, $seller, 'dispatch notes');
+		print('Refetching the order');
+		$getBuyerOrder = $this->getBuyerOrder($buyer, $order->getId());
+		dd($getBuyerOrder->toArray());	
 	}
 
 	/**
