@@ -98,13 +98,15 @@ class OrderRepository implements OrderRepositoryInterface
      */
     public static function find($orderId): ?Order
     {
-    	$order = OrderModel::with(
+    	$order = OrderModel::with([
     		'buyer',
     		'seller',
     		'items',
-    		'states',
+    		'states'=> function($query) {
+    			return $query->orderBy('id', 'desc');
+    		},
     		'address'
-    	)->find($orderId);
+    	])->find($orderId);
     	if($order) {
     		$orderEntity = self::orderTransformer($order);
     		return $orderEntity;
@@ -121,16 +123,18 @@ class OrderRepository implements OrderRepositoryInterface
      */
     public static function listForBuyer(Buyer $buyer): OrdersCollection
     {
-    	$orders = OrderModel::with(
+    	$orders = OrderModel::with([
     		'buyer',
     		'seller',
     		'items',
-    		'states',
+    		'states' => function($query) {
+    			return $query->orderBy('id', 'desc');
+    		},
     		'address'
-    	)->where([
+    	])->where([
     		'buyer_id' => $buyer->retrieveIdentifierValue(),
     		'buyer_type' => $buyer->retrieveClassType(),
-    	])->get();
+    	])->orderBy('id', 'desc')->get();
     	if($orders) {
     		$ordersCollection = new OrdersCollection( 
     			$orders->map(function($orderModel) {
@@ -151,13 +155,15 @@ class OrderRepository implements OrderRepositoryInterface
      */
     public static function listForSeller(Seller $seller): OrdersCollection 
     {
-    	$orders = OrderModel::with(
+    	$orders = OrderModel::with([
     		'buyer',
     		'seller',
     		'items',
-    		'states',
+    		'states' => function($query) {
+    			return $query->orderBy('id', 'desc');
+    		},
     		'address'
-    	)->where([
+    	])->where([
     		'seller_id' => $seller->retrieveIdentifierValue(),
     		'seller_type' => $seller->retrieveClassType(),
     	])->get();

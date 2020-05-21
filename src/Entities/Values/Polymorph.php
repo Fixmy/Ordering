@@ -9,10 +9,10 @@ class Polymorph implements PolymorphsContract
 {
 	use Polymorphs;
 
-	public function __construct($value = null, $class = null, $key = 'id') 
+	public function __construct($type = null, $id = null, $key = 'id') 
 	{
-		$this->setIdentifierValue($value);
-		$this->setClassType($class);
+		$this->setIdentifierValue($id);
+		$this->setClassType($type);
 		$this->setIdentifierKey($key);
 	}
 }

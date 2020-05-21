@@ -10,12 +10,11 @@ class OrderStatesCollection extends Collection implements Contract
 {
     public function getActiveState(): OrderState
     {
-    	$sorted = $this->sortBy(function($item)
+    	$sorted = $this->sortByDesc(function($item)
     	{
     	  return $item->getCreatedAt();
     	});
-
-    	return $this->last();
+    	return $sorted->first();
     }
 
     /**

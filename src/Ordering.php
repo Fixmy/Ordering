@@ -49,9 +49,9 @@ class Ordering implements OrderingContract
 		print_r('----------------------------------------------------------');
 		print_r('----------------------------------------------------------');
 		print_r('Attempting adding a new state');
-		$this->setOrderState($order->getId(), Status::DISPATCHED, $seller, 'dispatch notes');
+		$this->setOrderState($order->getId(), Status::APPROVED, $seller, 'approved notes');
 		print('Refetching the order');
-		$getBuyerOrder = $this->getBuyerOrder($buyer, $order->getId());
+		$getBuyerOrder = $this->getBuyerOrders($buyer);
 		dd($getBuyerOrder->toArray());	
 	}
 
