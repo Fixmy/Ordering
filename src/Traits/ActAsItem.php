@@ -23,7 +23,7 @@ trait ActAsItem
 
 	public function getUnitPrice() : float
 	{
-		return $this->itemUnitPrice;
+		return $this->itemUnitPrice :? $this->price;
 	}
 
 	public function setUnitPrice(float $itemUnitPrice) : void
@@ -38,7 +38,7 @@ trait ActAsItem
 
 	public function getItemOrderDescription() : string
 	{
-		return $this->itemOrderDescription;
+		return $this->itemOrderDescription ?: $this->description;
 	}
 
 	public function setItemOrderDescription($description) : void
@@ -46,9 +46,9 @@ trait ActAsItem
 		$this->itemOrderDescription = $description;
 	}
 
-	public function toOrderItem($quantity, $unitPrice)
+	public function toOrderItem()
 	{
-		$orderItem = new OrderItem($quantity, $unitPrice, $this->description);
+		$orderItem = new OrderItem($this->getQuantity(), $this->getUnitPrice(), $this->getItemOrderDescription());
 		$orderItem->setIdentifierKey($this->retrieveIdentifierKey());
 		$orderItem->setIdentifierValue($this->retrieveIdentifierValue());
 		$orderItem->setClassType($this->retrieveClassType());
