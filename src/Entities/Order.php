@@ -224,8 +224,8 @@ class Order implements OrderContract
 			'currency'     => $this->currency->getCode(),
 			'createdAt'    => $this->createdAt,
 			'status'       => $this->resolveStatus()->getType(),
-			'buyerStatus'  => $this->resolveStatus()->getType(),
-			'traderStatus' => $this->resolveStatus()->getType(),
+			'buyerStatus'  => $this->resolveBuyerStatus()->getType(),
+			'traderStatus' => $this->resolveTraderStatus()->getType(),
 		];
 	}
 }
