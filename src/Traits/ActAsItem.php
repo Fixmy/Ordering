@@ -23,7 +23,7 @@ trait ActAsItem
 
 	public function getUnitPrice() : float
 	{
-		return $this->itemUnitPrice :? $this->price;
+		return $this->itemUnitPrice ?: $this->price;
 	}
 
 	public function setUnitPrice(float $itemUnitPrice) : void
