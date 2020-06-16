@@ -121,7 +121,7 @@ class OrderStatus implements OrderStatusContract
 		}
 	}
 
-	public static function matchTraderStatus(OrderState $state): OrderStatusContract
+	public static function matchSellerStatus(OrderState $state): OrderStatusContract
 	{	
 		switch($state->getStatus()->getType())
 		{

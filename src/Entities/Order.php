@@ -205,10 +205,10 @@ class Order implements OrderContract
 	/**
 	 * @return Status [description]
 	 */
-	public function resolveTraderStatus(): OrderStatus 
+	public function resolveSellerStatus(): OrderStatus 
 	{
 		$currentState = $this->states->getActiveState();
-		return OrderStatus::matchTraderStatus($currentState);
+		return OrderStatus::matchSellerStatus($currentState);
 	}
 
 	public function toArray()
@@ -225,7 +225,7 @@ class Order implements OrderContract
 			'createdAt'    => $this->createdAt,
 			'status'       => $this->resolveStatus()->getType(),
 			'buyerStatus'  => $this->resolveBuyerStatus()->getType(),
-			'traderStatus' => $this->resolveTraderStatus()->getType(),
+			'traderStatus' => $this->resolveSellerStatus()->getType(),
 		];
 	}
 }

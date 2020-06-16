@@ -101,4 +101,20 @@ interface Order extends Arrayable
 	 * @return Fixme/Ordering/Entities/Values/OrderStatus
 	 */
 	public function resolveStatus(): OrderStatus;
+
+	/**
+	 * return the status of the Order based on the state, relevant for the buyer
+	 * 
+	 * @return Fixme/Ordering/Entities/Values/OrderStatus
+	 */
+	public function resolveBuyerStatus(): OrderStatus;
+
+	/**
+	 * return the status of the Order based on the state, relevant for the seller
+	 * 
+	 * @return Fixme/Ordering/Entities/Values/OrderStatus
+	 */
+	public function resolveSellerStatus(): OrderStatus;
+
+
 }
