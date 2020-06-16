@@ -16,6 +16,7 @@ class OrderStatus implements OrderStatusContract
 	public const COMPLETED  = 'completed'; // 
 	public const DELIVERED  = 'delivered'; // trader marked delivered
 	public const CONFIRMED  = 'confirmed'; // buyer confirmed receipt 
+	public const UNRESOLVED  = 'unresolved'; // unresolved status 
 
 	protected $type;
 
@@ -60,6 +61,7 @@ class OrderStatus implements OrderStatusContract
 			//open
 			case Status::REQUESTED:
 				return (new static(self::OPEN));
+				break;
 			//inprogress
 			case Status::ACCEPTED:
 			case Status::EDITED:
@@ -69,10 +71,12 @@ class OrderStatus implements OrderStatusContract
 			case Status::ANSWERED:
 			case Status::DELIVERED:
 				return (new static(self::INPROGRESS));
+				break;
 			//disputed
 			case Status::DISPUTED:
 			case Status::RESOLVED:
 				return (new static(self::DISPUTED));
+				break;
 			//closed
 			case Status::REJECTED:
 			case Status::DECLINED:
@@ -81,6 +85,9 @@ class OrderStatus implements OrderStatusContract
 			case Status::COMPLETED:
 			case Status::ABORTED:
 				return (new static(self::TERMINATED));
+				break;
+			default: 
+				return (new static(self::UNRESOLVED));
 		}
 	}
 
@@ -90,19 +97,27 @@ class OrderStatus implements OrderStatusContract
 		{
 			case Status::REQUESTED:
 				return (new static(self::OPEN));
+				break;
 			case Status::ACCEPTED:
 				return (new static(self::INPROGRESS));
+				break;
 			case Status::DISPATCHED:
 			case Status::DELIVERED:
 				return (new static(self::REQUIRES_CONFIRMATION));
+				break;
 			case Status::DISPUTED:
 				return (new static(self::DISPUTED));
+				break;
 			case Status::REJECTED:
 			case Status::CANCELED:
 				return (new static(self::TERMINATED));
+				break;
 			case Status::COMPLETED:
 			case Status::CONFIRMED:
 				return (new static(self::COMPLETED));
+				break;
+			default: 
+				return (new static(self::UNRESOLVED));
 		}
 	}
 
@@ -112,19 +127,27 @@ class OrderStatus implements OrderStatusContract
 		{
 			case Status::OPEN:
 				return (new static(self::OPEN));
+				break;
 			case Status::ACCEPTED:
 			case Status::DISPATCHED:
 				return (new static(self::INPROGRESS));
+				break;
 			case Status::CONFIRMED:
 				return (new static(self::REQUIRES_CONFIRMATION));
+				break;
 			case Status::DISPUTED:
 				return (new static(self::DISPUTED));
+				break;
 			case Status::REJECTED:
 			case Status::CANCELED:
 				return (new static(self::TERMINATED));
+				break;
 			case Status::COMPLETED:
 			case Status::DELIVERED:
 				return (new static(self::COMPLETED));
+				break;
+			default: 
+				return (new static(self::UNRESOLVED));
 		}
 	}
 }
