@@ -13,7 +13,7 @@ class OrderStatus implements OrderStatusContract
 	public const DISPATCHED = 'dispatched'; // after seller aproves it
 	public const REQUIRES_CONFIRMATION = 'requires-confirmation';
 	public const DISPUTED   = 'disputed'; // buyer not happy
-	public const COMPLETED  = 'completed'; // trader aproved edits
+	public const COMPLETED  = 'completed'; // 
 	public const DELIVERED  = 'delivered'; // trader marked delivered
 	public const CONFIRMED  = 'confirmed'; // buyer confirmed receipt 
 
@@ -80,7 +80,7 @@ class OrderStatus implements OrderStatusContract
 			case Status::TERMINATED:
 			case Status::COMPLETED:
 			case Status::ABORTED:
-				return (new static(self::CLOSED));
+				return (new static(self::TERMINATED));
 		}
 	}
 
