@@ -193,19 +193,39 @@ class Order implements OrderContract
 		return OrderStatus::matchStateStatus($currentState);
 	}
 
+	/**
+	 * @return Status [description]
+	 */
+	public function resolveBuyerStatus(): OrderStatus 
+	{
+		$currentState = $this->states->getActiveState();
+		return OrderStatus::matchBuyerStatus($currentState);
+	}
+
+	/**
+	 * @return Status [description]
+	 */
+	public function resolveTraderStatus(): OrderStatus 
+	{
+		$currentState = $this->states->getActiveState();
+		return OrderStatus::matchTraderStatus($currentState);
+	}
+
 	public function toArray()
 	{
 		return [
-			'id'          => $this->getId(),
-			'buyer'       => $this->buyer->toArray(),
-			'seller'      => $this->seller->toArray(),
-			'items'       => $this->items->toArray(),
-			'addressInfo' => $this->addressInfo->toArray(),
-			'states'      => $this->states->toArray(),
-			'itemsPrice'  => $this->getItemsPrice(),
-			'currency'    => $this->currency->getCode(),
-			'createdAt'   => $this->createdAt,
-			'status'      => $this->resolveStatus()->getType(),
+			'id'           => $this->getId(),
+			'buyer'        => $this->buyer->toArray(),
+			'seller'       => $this->seller->toArray(),
+			'items'        => $this->items->toArray(),
+			'addressInfo'  => $this->addressInfo->toArray(),
+			'states'       => $this->states->toArray(),
+			'itemsPrice'   => $this->getItemsPrice(),
+			'currency'     => $this->currency->getCode(),
+			'createdAt'    => $this->createdAt,
+			'status'       => $this->resolveStatus()->getType(),
+			'buyerStatus'  => $this->resolveStatus()->getType(),
+			'traderStatus' => $this->resolveStatus()->getType(),
 		];
 	}
 }

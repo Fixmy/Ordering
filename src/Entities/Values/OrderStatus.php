@@ -8,9 +8,14 @@ use Fixme\Ordering\Entities\OrderState;
 class OrderStatus implements OrderStatusContract
 {
 	public const OPEN       = 'open'; // an order that is only requested
-	public const CLOSED     = 'closed'; // an order that is closed
+	public const TERMINATED = 'terminated'; // an order that is closed
 	public const INPROGRESS = 'in-progress'; // after seller aproves it
-	public const DISPUTED   = 'disputed'; // buyer aproved edits
+	public const DISPATCHED = 'dispatched'; // after seller aproves it
+	public const REQUIRES_CONFIRMATION = 'requires-confirmation'
+	public const DISPUTED   = 'disputed'; // buyer not happy
+	public const COMPLETED  = 'completed'; // trader aproved edits
+	public const DELIVERED  = 'delivered'; // trader marked delivered
+	public const CONFIRMED  = 'confirmed'; // buyer confirmed receipt 
 
 	protected $type;
 
@@ -76,6 +81,50 @@ class OrderStatus implements OrderStatusContract
 			case Status::COMPLETED:
 			case Status::ABORTED:
 				return (new static(self::CLOSED));
+		}
+	}
+
+	public static function matchBuyerStatus(OrderState $state): OrderStatusContract
+	{	
+		switch($state->getStatus()->getType())
+		{
+			case Status::REQUESTED:
+				return (new static(self::OPEN));
+			case Status::ACCEPTED:
+				return (new static(self::INPROGRESS));
+			case Status::DISPATCHED:
+			case Status::DELIVERED:
+				return (new static(self::REQUIRES_CONFIRMATION));
+			case Status::DISPUTED:
+				return (new static(self::DISPUTED));
+			case Status::REJECTED:
+			case Status::CANCELED:
+				return (new static(self::TERMINATED));
+			case Status::COMPLETED:
+			case Status::CONFIRMED:
+				return (new static(self::COMPLETED));
+		}
+	}
+
+	public static function matchTraderStatus(OrderState $state): OrderStatusContract
+	{	
+		switch($state->getStatus()->getType())
+		{
+			case Status::OPEN:
+				return (new static(self::OPEN));
+			case Status::ACCEPTED:
+			case Status::DISPATCHED:
+				return (new static(self::INPROGRESS));
+			case Status::CONFIRMED:
+				return (new static(self::REQUIRES_CONFIRMATION));
+			case Status::DISPUTED:
+				return (new static(self::DISPUTED));
+			case Status::REJECTED:
+			case Status::CANCELED:
+				return (new static(self::TERMINATED));
+			case Status::COMPLETED:
+			case Status::DELIVERED:
+				return (new static(self::COMPLETED));
 		}
 	}
 }
