@@ -11,7 +11,7 @@ class OrderStatus implements OrderStatusContract
 	public const TERMINATED = 'terminated'; // an order that is closed
 	public const INPROGRESS = 'in-progress'; // after seller aproves it
 	public const DISPATCHED = 'dispatched'; // after seller aproves it
-	public const REQUIRES_CONFIRMATION = 'requires-confirmation'
+	public const REQUIRES_CONFIRMATION = 'requires-confirmation';
 	public const DISPUTED   = 'disputed'; // buyer not happy
 	public const COMPLETED  = 'completed'; // trader aproved edits
 	public const DELIVERED  = 'delivered'; // trader marked delivered
