@@ -109,6 +109,7 @@ class OrderStatus implements OrderStatusContract
 				return (new static(self::DISPUTED));
 				break;
 			case Status::REJECTED:
+			case Status::DECLINED:
 			case Status::CANCELED:
 				return (new static(self::TERMINATED));
 				break;
