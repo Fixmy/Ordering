@@ -52,7 +52,6 @@ class OrderRepository implements OrderRepositoryInterface
 		$orderModel->seller_key  = $order->getSeller()->retrieveIdentifierKey();
 		$orderModel->currency    = $order->getCurrency()->getCode();
 		$orderModel->created_at  = $order->getCreatedAt();
-		$orderModel->status = $order->resolveStatus()->getType();
 		$orderModel->save();
 		///////////////////////////////
 		$order->setId($orderModel->id);

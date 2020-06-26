@@ -33,6 +33,7 @@ class Ordering implements OrderingContract
 	 */
 	public function test() 
 	{	
+		dd('hey');
 		print_r('----------------------------------------------------------');
 		print_r('hello from ordering');
 		print_r('----------------------------------------------------------');
