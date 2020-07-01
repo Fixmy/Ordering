@@ -38,10 +38,10 @@ class OrderRepository implements OrderRepositoryInterface
     {
     	if($order->getId()) 
     	{
-    		self::addOrderState($order); // this is the only thing that currently requires updates
-    		$orderModel = OrderModel::find($order->getId());
-    		$orderModel->status = $order->resolveStatus()->getType();
-    		return $orderModel->save();
+			return self::addOrderState($order); // this is the only thing that currently requires updates
+    		// $orderModel = OrderModel::find($order->getId());
+    		// $orderModel->status = $order->resolveStatus()->getType();
+    		// return $orderModel->save();
     	}
     	$orderModel = new OrderModel();
 		$orderModel->buyer_id    = $order->getBuyer()->retrieveIdentifierValue();
