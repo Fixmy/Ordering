@@ -135,6 +135,7 @@ class OrderStatus implements OrderStatusContract
 				break;
 			case Status::REJECTED:
 			case Status::CANCELED:
+			case Status::DECLINED:
 				return (new static(self::FAILED));
 				break;
 			case Status::COMPLETED:
