@@ -71,13 +71,15 @@ class Ordering implements OrderingContract
 		SellerContract $seller, 
 		AddressInfoContract $addressInfo, 
 		string $currency,
+		float $deliveryCharge,
+		string $countryCode,
 		ItemContract ...$items
 	): Order {
 		$itemsCollection = new ItemsCollection($items);
 		$orderBuyer	= Buyer::clientCopy($buyer);
 		$orderSeller = Seller::clientCopy($seller);
 		$orderCurrency = new Currency($currency);
-		$order	= new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection, $orderCurrency);
+		$order	= new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection, $orderCurrency, $deliveryCharge, $countryCode);
 		OrderRepository::save($order);
 		return $order;
 	}

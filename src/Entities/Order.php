@@ -21,6 +21,8 @@ class Order implements OrderContract
 	protected $states;
 	protected $createdAt;
 	protected $status;
+	protected $deliveryCharge;
+	protected $countryCode;
 
 	/**
 	 * Creates a new Order Class Entity
@@ -39,6 +41,8 @@ class Order implements OrderContract
 		AddressInfo $addressInfo,
 		ItemsCollection $items,
 		Currency $currency,
+		$deliveryCharge = null,
+		$countryCode = null,
 		OrderStatesCollection $states = null
 	) {
 		$this->buyer   	= $buyer;
@@ -46,6 +50,9 @@ class Order implements OrderContract
 		$this->items	= $items;
 		$this->addressInfo = $addressInfo;
 		$this->currency = $currency;
+		$this->countryCode = $countryCode;
+		$this->deliveryCharge = $deliveryCharge;
+
     	if(isset($states)) {
     		$this->states = $states;
     	} else {
@@ -211,21 +218,42 @@ class Order implements OrderContract
 		return OrderStatus::matchSellerStatus($currentState);
 	}
 
+	/**
+	 * return the deliver charge associated with an order
+	 * @return float|null
+	 */
+	public function getDeliveryCharge(): ?float
+	{
+		return $this->deliveryCharge;
+	}
+	
+	/**
+	 * return the country code associated with an order
+	 * @return string|null
+	 */
+	public function getCountryCode(): ?string
+	{
+		return $this->countryCode;
+	}
+
+
 	public function toArray()
 	{
 		return [
-			'id'           => $this->getId(),
-			'buyer'        => $this->buyer->toArray(),
-			'seller'       => $this->seller->toArray(),
-			'items'        => $this->items->toArray(),
-			'addressInfo'  => $this->addressInfo->toArray(),
-			'states'       => $this->states->toArray(),
-			'itemsPrice'   => $this->getItemsPrice(),
-			'currency'     => $this->currency->getCode(),
-			'createdAt'    => $this->createdAt,
-			'status'       => $this->resolveStatus()->getType(),
-			'buyerStatus'  => $this->resolveBuyerStatus()->getType(),
-			'traderStatus' => $this->resolveSellerStatus()->getType(),
+			'id'             => $this->getId(),
+			'buyer'          => $this->buyer->toArray(),
+			'seller'         => $this->seller->toArray(),
+			'items'          => $this->items->toArray(),
+			'addressInfo'    => $this->addressInfo->toArray(),
+			'states'         => $this->states->toArray(),
+			'itemsPrice'     => $this->getItemsPrice(),
+			'currency'       => $this->currency->getCode(),
+			'createdAt'      => $this->createdAt,
+			'deliveryCharge' => $this->getDeliveryCharge(),
+			'countryCode'    => $this->getCountryCode()->toArray(),
+			'status'         => $this->resolveStatus()->getType(),
+			'buyerStatus'    => $this->resolveBuyerStatus()->getType(),
+			'traderStatus'   => $this->resolveSellerStatus()->getType(),
 		];
 	}
 }

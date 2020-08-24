@@ -117,4 +117,17 @@ interface Order extends Arrayable
 	public function resolveSellerStatus(): OrderStatus;
 
 
+	/**
+	 * return the deliver charge associated with an order
+	 * @return float|null
+	 */
+	public function getDeliveryCharge(): ?float;
+	
+	/**
+	 * return the country code associated with an order
+	 * @return string|null
+	 */
+	public function getCountryCode(): ?string;
+
+
 }

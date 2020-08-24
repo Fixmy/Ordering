@@ -226,6 +226,10 @@ class OrderRepository implements OrderRepositoryInterface
 		$orderSeller = Seller::clientCopy($orderModel->seller);
 		$addressInfo = new AddressInfo($orderModel->address->phone_number, $orderModel->address->address_line);
 		$currency = new Currency($orderModel->currency);
+		$deliveryCharge = $orderModel->delivery_charge;
+		$countryCode = $orderModel->country_code;
+
+
 		$orderStatesCollection = new OrderStatesCollection(
 			$orderModel->states->map(function($stateModel) {
 				$issuer     = new Polymorph($stateModel->issuer_type, $stateModel->issuer_id, $stateModel->issuer_key);
@@ -240,7 +244,15 @@ class OrderRepository implements OrderRepositoryInterface
 			})
 		);
 
-		$orderEntity  = new Order($orderBuyer, $orderSeller, $addressInfo, $itemsCollection, $currency, $orderStatesCollection);
+		$orderEntity  = new Order(
+			$orderBuyer, 
+			$orderSeller,
+			$addressInfo,
+			$itemsCollection,
+			$currency,
+			$deliveryCharge,
+			$countryCode,
+			$orderStatesCollection);
 		$orderEntity->setId($orderModel->id);
 		$orderEntity->setCreationDate($orderModel->created_at);
 		return $orderEntity;
