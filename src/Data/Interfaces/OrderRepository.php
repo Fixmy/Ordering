@@ -40,4 +40,12 @@ interface OrderRepository
 	 * @return OrdersCollection
 	 */
 	public static function listForSeller(Seller $seller): OrdersCollection;
+
+	/**
+	 * get a list of orders	
+	 * 
+	 * @return OrdersCollection
+	 */
+	public static function getOrders(\DateTime $from, \DateTime $to, string $countryCode = null, string $status = null): OrdersCollection;
+
 }

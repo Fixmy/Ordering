@@ -20,6 +20,8 @@ interface Ordering
 	 * @param  Fixme\Ordering\Contracts\Client\Seller $seller
 	 * @param  Fixme\Ordering\Contracts\Client\AddressInfo $addressInfo
 	 * @param  string $currencyCode a three letter abbriviation of the currency (LBP, USD, etc..)
+	 * @param  float $deliveryCharge the delivery charge for the order (can be zero)
+	 * @param  string $countryCode a three letter abbriviation of the country (LEB..)
 	 * @param  Fixme\Ordering\Contracts\Client\Item[] $items
 	 * @return Fixme\Ordering\Entities\Order
 	 */
@@ -28,6 +30,8 @@ interface Ordering
 		Seller $seller,
 		AddressInfo $addressInfo,
 		string $currencyCode,
+		float $deliveryCharge,
+		string $countryCode,
 	 	Item ...$items
 	): Order;
 
@@ -91,4 +95,17 @@ interface Ordering
 	 * @return bool $result of the delete operation
 	 */
 	public function delete($orderId): bool;
+
+	/**
+	 *  Get a list of all system orders
+	 *  
+	 * @param  DateTime    $from
+	 * @param  DateTime    $to
+	 * @param  string|null $countryCode
+	 * @param  string|null $status
+	 * @return Fixme\Ordering\Entities\Collections\OrderCollection
+	 */
+	public function getOrders(\DateTime $from, \DateTime $to, string $countryCode = null, string $status = null): OrdersCollection;
+
+
 }

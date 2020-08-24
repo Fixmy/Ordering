@@ -44,13 +44,16 @@ class OrderRepository implements OrderRepositoryInterface
     		// return $orderModel->save();
     	}
     	$orderModel = new OrderModel();
-		$orderModel->buyer_id    = $order->getBuyer()->retrieveIdentifierValue();
-		$orderModel->buyer_type  = $order->getBuyer()->retrieveClassType();
-		$orderModel->buyer_key   = $order->getBuyer()->retrieveIdentifierKey();
-		$orderModel->seller_id   = $order->getSeller()->retrieveIdentifierValue();
-		$orderModel->seller_type = $order->getSeller()->retrieveClassType();
-		$orderModel->seller_key  = $order->getSeller()->retrieveIdentifierKey();
-		$orderModel->currency    = $order->getCurrency()->getCode();
+		$orderModel->buyer_id        = $order->getBuyer()->retrieveIdentifierValue();
+		$orderModel->buyer_type      = $order->getBuyer()->retrieveClassType();
+		$orderModel->buyer_key       = $order->getBuyer()->retrieveIdentifierKey();
+		$orderModel->seller_id       = $order->getSeller()->retrieveIdentifierValue();
+		$orderModel->seller_type     = $order->getSeller()->retrieveClassType();
+		$orderModel->seller_key      = $order->getSeller()->retrieveIdentifierKey();
+		$orderModel->currency        = $order->getCurrency()->getCode();
+		$orderModel->country_code    = $order->getCountryCode();
+		$orderModel->delivery_charge = $order->getDeliveryCharge();
+
 		$orderModel->created_at  = $order->getCreatedAt();
 		$orderModel->save();
 		///////////////////////////////
@@ -178,6 +181,50 @@ class OrderRepository implements OrderRepositoryInterface
     	}
     }
 
+    /**
+     * get a list of orders
+     * 
+     * @return OrdersCollection
+     */
+    public static function getOrders(\DateTime $from, \DateTime $to, string $countryCode = null, string $status = null): OrdersCollection 
+    {	
+    	$orders = OrderModel::with([
+    		'buyer',
+    		'seller',
+    		'items',
+    		'states' => function($query) {
+    			return $query->orderBy('id', 'desc');
+    		},
+    		'address'
+    	])
+
+		->when($countryCode, function ($query, $countryCode) {
+		              return $query->where('country_code', $countryCode);
+		})
+    	->whereBetween('created_at', [$from, $to])
+    	->get();
+    	if($orders) {
+    		$ordersCollection = new OrdersCollection( 
+    			$orders->map(function($orderModel) {
+    				return self::orderTransformer($orderModel);
+    			})
+    		);
+
+    		if(!is_null($status)) {
+    			$filteredCollection =  $ordersCollection->filter(function($order, $key) use ($status) {
+    				return ($order->resolveStatus()->getType() === $status);
+    			});
+
+    			return $filteredCollection;
+    		} else {
+    			return $ordersCollection;
+    		}
+
+    	} else {	
+    		return (new OrdersCollection());
+    	}
+    }
+
     private static function addOrderState(Order &$order): bool
     {
 		$orderState = $order->getStates()->getActiveState();
@@ -228,7 +275,6 @@ class OrderRepository implements OrderRepositoryInterface
 		$currency = new Currency($orderModel->currency);
 		$deliveryCharge = $orderModel->delivery_charge;
 		$countryCode = $orderModel->country_code;
-
 
 		$orderStatesCollection = new OrderStatesCollection(
 			$orderModel->states->map(function($stateModel) {

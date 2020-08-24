@@ -35,7 +35,9 @@ class OrderStatus implements OrderStatusContract
 		if($this->isValidStatus($type)) {
 			$this->type = $type;
 		} else {
-			$exception = new \Exception('Invalid Status Type');
+			$thisClass = new \ReflectionClass(__CLASS__);
+			$types = $thisClass->getConstants();
+			$exception = new \Exception("Invalid Status Type, $type does not exist in: [" .implode(', ', $types). "]");
 			throw $exception;
 		}
 	}

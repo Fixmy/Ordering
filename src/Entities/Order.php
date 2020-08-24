@@ -250,7 +250,7 @@ class Order implements OrderContract
 			'currency'       => $this->currency->getCode(),
 			'createdAt'      => $this->createdAt,
 			'deliveryCharge' => $this->getDeliveryCharge(),
-			'countryCode'    => $this->getCountryCode()->toArray(),
+			'countryCode'    => $this->getCountryCode(),
 			'status'         => $this->resolveStatus()->getType(),
 			'buyerStatus'    => $this->resolveBuyerStatus()->getType(),
 			'traderStatus'   => $this->resolveSellerStatus()->getType(),

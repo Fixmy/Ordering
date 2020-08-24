@@ -6,6 +6,7 @@ namespace Fixme\Ordering;
  * Main Application Models - used for testing while development
  */
 use App\Models\Items\Item;
+use App\Models\Notifications\NotificationUser;
 use App\Models\Shops\Shop;
 use App\Models\Users\Beneficiary;
 use Fixme\Ordering\Contracts\Client\AddressInfo as AddressInfoContract;
@@ -22,6 +23,7 @@ use Fixme\Ordering\Entities\Order;
 use Fixme\Ordering\Entities\OrderState;
 use Fixme\Ordering\Entities\Seller;
 use Fixme\Ordering\Entities\Values\Currency;
+use Fixme\Ordering\Entities\Values\OrderStatus;
 use Fixme\Ordering\Entities\Values\Status;
 
 class Ordering implements OrderingContract
@@ -33,25 +35,27 @@ class Ordering implements OrderingContract
 	 */
 	public function test() 
 	{	
-		dd('hey');
 		print_r('----------------------------------------------------------');
 		print_r('hello from ordering');
 		print_r('----------------------------------------------------------');
 		print_r('----------------------------------------------------------');
 		print_r('creating an order');
-		$buyer  = Beneficiary::all()->random();
+		$buyer  = NotificationUser::all()->random();
 		$seller = Shop::all()->random(); 
 		$items  = Item::all()->random(3)->map(function($item) {
-			return $item->toOrderItem($quantity = rand(1, 3), $price = rand(100, 500));
+			$item->setQuantity(rand(1, 3));
+			$item->setUnitPrice(rand(100, 500));
+            $item->setItemOrderDescription('asdasdasdasdasdsad');                    
+			return $item->toOrderItem();
 		});
 		$address = new AddressInfo('76372024', 'St Marc Des Pins, Street nb 1');
-		$order = $this->request($buyer, $seller, $address, 'LBP', ...$items);
+		$order = $this->request($buyer, $seller, $address, 'LBP', 2, 'LEB', ...$items);
 		print_r('Order Created!');
 		print_r('----------------------------------------------------------');
 		print_r('----------------------------------------------------------');
 		print_r('Attempting adding a new state');
-		$this->setOrderState($order->getId(), Status::APPROVED, $seller, 'approved notes');
-		print('Refetching the order');
+		// $this->setOrderState($order->getId(), Status::APPROVED, $seller, 'approved notes');
+		// print('Refetching the order');
 		$getBuyerOrder = $this->getBuyerOrders($buyer);
 		dd($getBuyerOrder->toArray());	
 	}
@@ -169,6 +173,26 @@ class Ordering implements OrderingContract
 	public function delete($orderId): bool
 	{
 
+	}
+
+	/**
+	 *  Get a list of all system orders
+	 *  
+	 * @param  DateTime    $from
+	 * @param  DateTime    $to
+	 * @param  string|null $countryCode
+	 * @param  string|null $status
+	 * @return Fixme\Ordering\Entities\Collections\OrderCollection
+	 */
+	public function getOrders(\DateTime $from, \DateTime $to, string $countryCode = null, string $status = null): OrdersCollection
+	{
+		if(!is_null($status)) {
+			$orderStatus = new OrderStatus($status);
+			$status = $orderStatus->getType();
+		}
+		
+		$orders = OrderRepository::getOrders($from, $to, $countryCode, $status);
+		return $orders;
 	}
 
 }
