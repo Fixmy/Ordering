@@ -5,6 +5,8 @@ namespace Fixme\Ordering\Data\Repositories;
 /**
  *  Data Models
  */
+
+use App\Models\System\Beneficiary;
 use Fixme\Ordering\Data\Interfaces\OrderRepository as OrderRepositoryInterface;
 use Fixme\Ordering\Data\Models\Order as OrderModel;
 use Fixme\Ordering\Data\Models\OrderAddress;
@@ -268,6 +270,13 @@ class OrderRepository implements OrderRepositoryInterface
 				return $itemEntity;
 			})
 		);
+
+        // fix null buyers
+        // @TODO have a full namespace on the buyer_type column
+        if(!$orderModel->buyer)
+        {
+            $orderModel->buyer = Beneficiary::find($orderModel->buyer_id);
+        }
 
 		$orderBuyer	= Buyer::clientCopy($orderModel->buyer);
 		$orderSeller = Seller::clientCopy($orderModel->seller);
