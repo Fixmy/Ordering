@@ -36,7 +36,7 @@ class Ordering implements OrderingContract
 	public function test() 
 	{	
 		print_r('----------------------------------------------------------');
-		print_r('hello from ordering');
+		print_r('hello from ordering!!');
 		print_r('----------------------------------------------------------');
 		print_r('----------------------------------------------------------');
 		print_r('creating an order');

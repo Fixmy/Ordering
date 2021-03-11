@@ -7,7 +7,6 @@ return [
 		'product' => 'App\Models\Items\Item',
 		'beneficiary' => 'App\Models\Users\Beneficiary',
 	],
-
 ];
 
 ?>
