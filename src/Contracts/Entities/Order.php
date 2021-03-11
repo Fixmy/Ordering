@@ -129,5 +129,12 @@ interface Order extends Arrayable
 	 */
 	public function getCountryCode(): ?string;
 
+	/**
+	 * return order note
+	 * 
+	 * @return string|null
+	 */
+	public function getNotes(): ?string;
+
 
 }

@@ -48,4 +48,20 @@ interface Item extends Polymorphs
 	 * @return void
 	 */
 	public function setItemOrderDescription(string $description) : void;
+
+	/**
+	 * gets if item updated
+	 * 
+	 * @return number
+	 */
+	public function getUpdated() : int;
+
+	/**
+	 * set updated to item
+	 * 
+	 * @param int $updated
+	 * @return void
+	 */
+	public function setUpdated(int $updated) : void;
+	
 }

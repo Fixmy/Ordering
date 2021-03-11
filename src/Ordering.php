@@ -195,6 +195,23 @@ class Ordering implements OrderingContract
 		return $orders;
 	}
 
+	/**
+	 * updateOrderItems
+	 * remove items from order
+	 * @param orderId
+	 * @param items
+	 * @param note
+	 * @return Fixme\Ordering\Entities\Order|null
+	 */
+	public function updateOrderItems($orderId, $items, $note): ?Order
+	{
+		$order = OrderRepository::find($orderId);
+		$updatesNote = $order->notes.' \n\r '.$note;
+		$newOrder = OrderRepository::updateOrderItems($orderId, $items, $updatesNote);
+		
+		return $newOrder;
+	}
+
 }
 
 
