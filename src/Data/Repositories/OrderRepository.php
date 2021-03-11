@@ -312,4 +312,25 @@ class OrderRepository implements OrderRepositoryInterface
 		$orderEntity->setCreationDate($orderModel->created_at);
 		return $orderEntity;
     }
+
+	/**
+	 * UpdateOrderItems
+	 * @param orderId
+	 * @param items
+	 * @param note
+	 */
+	public static function updateOrderItems($orderId, $items, $note): Order
+	{
+		$items->map(function($item) use ($orderId) {
+			if($item->updated) {
+				OrderItem::where('id', $item->id)->where('order_id', $orderId)->update(['updated' => $item->updated]);
+			}
+		});
+		
+		Order::where('id', $orderId)->update(['notes' => $note]);
+
+		$order = OrderRepository::find($orderId);
+
+		return $order;
+	}
 }

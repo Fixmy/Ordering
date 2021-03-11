@@ -46,6 +46,16 @@ trait ActAsItem
 		$this->itemOrderDescription = $description;
 	}
 
+	public function getUpdated() : int
+	{
+		return $this->itemUpdated;
+	}
+
+	public function setUpdated(int $Updated) : void
+	{
+		$this->itemUpdated = $Updated;
+	}
+
 	public function toOrderItem()
 	{
 		$orderItem = new OrderItem($this->getQuantity(), $this->getUnitPrice(), $this->getItemOrderDescription());

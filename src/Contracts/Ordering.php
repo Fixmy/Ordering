@@ -108,4 +108,14 @@ interface Ordering
 	public function getOrders(\DateTime $from, \DateTime $to, string $countryCode = null, string $status = null): OrdersCollection;
 
 
+	/**
+	 * updateOrderItems
+	 * remove items from order
+	 * @param orderId
+	 * @param items
+	 * @param note
+	 * @return Fixme\Ordering\Entities\Order|null
+	 */
+	public function updateOrderItems($orderId, $items, $note): ?Order;
+
 }

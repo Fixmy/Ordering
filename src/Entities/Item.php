@@ -30,6 +30,7 @@ class Item implements ItemContract
     	$orderItem = [
     		'description' => $this->getItemOrderDescription(),
     		'quantity' => $this->getQuantity(),
+			'updated' => $this->getUpdated(),
     		'unitPrice' => $this->getUnitPrice(),
     		'price' => $this->getLineItemPrice(),
     	];

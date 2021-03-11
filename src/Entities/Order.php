@@ -236,6 +236,17 @@ class Order implements OrderContract
 		return $this->countryCode;
 	}
 
+	/**
+	 * return order note
+	 * @return string|null
+	 */
+	public function getNotes(): ?string
+	{
+		return $this->notes;
+	}
+
+	
+
 
 	public function toArray()
 	{
@@ -254,6 +265,7 @@ class Order implements OrderContract
 			'status'         => $this->resolveStatus()->getType(),
 			'buyerStatus'    => $this->resolveBuyerStatus()->getType(),
 			'traderStatus'   => $this->resolveSellerStatus()->getType(),
+			'notes' 		 => $this->getNotes()
 		];
 	}
 }
