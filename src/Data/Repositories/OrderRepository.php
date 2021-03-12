@@ -263,7 +263,7 @@ class OrderRepository implements OrderRepositoryInterface
     {
 		$itemsCollection = new ItemsCollection(
 			$orderModel->items->map(function($item) {
-				$itemEntity = new Item($item->quantity, $item->unit_price, $item->description);
+				$itemEntity = new Item($item->quantity, $item->unit_price, $item->description, $item->updated);
 				$itemEntity->setIdentifierValue($item->item_id);
 				$itemEntity->setClassType($item->item_type);
 				$itemEntity->setIdentifierKey($item->item_key);
