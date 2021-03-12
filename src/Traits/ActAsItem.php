@@ -10,6 +10,7 @@ trait ActAsItem
 	private $itemQuantity;
 	private $itemUnitPrice;
 	private $itemOrderDescription;
+	private $itemUpdated;
 
 	public function getQuantity() : int
 	{
