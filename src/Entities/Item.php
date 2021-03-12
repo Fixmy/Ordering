@@ -18,11 +18,12 @@ class Item implements ItemContract
  	 * @param float  $unitPrice
  	 * @param string
  	 */
-    public function __construct(int $quantity, float $unitPrice, string $description)
+    public function __construct(int $quantity, float $unitPrice, string $description, int $updated)
     {
     	$this->setQuantity($quantity);
 		$this->setUnitPrice($unitPrice);
 		$this->setItemOrderDescription($description);
+		$this->setUpdated($updated);
     }
 
     public function toArray() 
