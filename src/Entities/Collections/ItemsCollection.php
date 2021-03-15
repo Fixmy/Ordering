@@ -16,7 +16,9 @@ class ItemsCollection extends Collection implements ItemsCollectionContract
     public function getTotalItemsPrice() : float
     {
     	return array_reduce($this->items, function($v, $item) {
-    	    return $v + $item->getLineItemPrice();
+            if($item->getUpdated() == 1){
+                return $v + $item->getLineItemPrice();
+            }    	    
     	}, 0);
     }
 
