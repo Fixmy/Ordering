@@ -43,6 +43,7 @@ class Order implements OrderContract
 		Currency $currency,
 		$deliveryCharge = null,
 		$countryCode = null,
+		$notes = null,
 		OrderStatesCollection $states = null
 	) {
 		$this->buyer   	= $buyer;
@@ -51,6 +52,7 @@ class Order implements OrderContract
 		$this->addressInfo = $addressInfo;
 		$this->currency = $currency;
 		$this->countryCode = $countryCode;
+		$this->notes = $notes;
 		$this->deliveryCharge = $deliveryCharge;
 
     	if(isset($states)) {

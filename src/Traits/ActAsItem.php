@@ -59,7 +59,7 @@ trait ActAsItem
 
 	public function toOrderItem()
 	{
-		$orderItem = new OrderItem($this->getQuantity(), $this->getUnitPrice(), $this->getItemOrderDescription());
+		$orderItem = new OrderItem($this->getQuantity(), $this->getUnitPrice(), $this->getItemOrderDescription(), $this->getUpdated());
 		$orderItem->setIdentifierKey($this->retrieveIdentifierKey());
 		$orderItem->setIdentifierValue($this->retrieveIdentifierValue());
 		$orderItem->setClassType($this->retrieveClassType());

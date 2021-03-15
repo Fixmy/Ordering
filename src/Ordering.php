@@ -206,7 +206,7 @@ class Ordering implements OrderingContract
 	public function updateOrderItems($orderId, $items, $note): ?Order
 	{
 		$order = OrderRepository::find($orderId);
-		$updatesNote = $order->notes.' \n\r '.$note;
+		$updatesNote = ($order->getNotes() && $order->getNotes() != '') ? $order->getNotes().' \n\r '.$note : $note;
 		$newOrder = OrderRepository::updateOrderItems($orderId, $items, $updatesNote);
 		
 		return $newOrder;

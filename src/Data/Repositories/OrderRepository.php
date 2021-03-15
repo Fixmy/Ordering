@@ -284,6 +284,7 @@ class OrderRepository implements OrderRepositoryInterface
 		$currency = new Currency($orderModel->currency);
 		$deliveryCharge = $orderModel->delivery_charge;
 		$countryCode = $orderModel->country_code;
+		$notes = $orderModel->notes;
 
 		$orderStatesCollection = new OrderStatesCollection(
 			$orderModel->states->map(function($stateModel) {
@@ -307,6 +308,7 @@ class OrderRepository implements OrderRepositoryInterface
 			$currency,
 			$deliveryCharge,
 			$countryCode,
+			$notes,
 			$orderStatesCollection);
 		$orderEntity->setId($orderModel->id);
 		$orderEntity->setCreationDate($orderModel->created_at);
@@ -320,14 +322,14 @@ class OrderRepository implements OrderRepositoryInterface
 	 * @param note
 	 */
 	public static function updateOrderItems($orderId, $items, $note): Order
-	{
+	{	
 		$items->map(function($item) use ($orderId) {
-			if($item->updated) {
-				OrderItem::where('id', $item->id)->where('order_id', $orderId)->update(['updated' => $item->updated]);
+			if($item->getUpdated() && $item->getUpdated() != 0) {
+				OrderItem::where('item_id', $item->retrieveIdentifierValue())->where('order_id', $orderId)->update(['updated' => $item->getUpdated()]);
 			}
 		});
 		
-		Order::where('id', $orderId)->update(['notes' => $note]);
+		OrderModel::where('id', $orderId)->update(['notes' => $note]);
 
 		$order = OrderRepository::find($orderId);
 
