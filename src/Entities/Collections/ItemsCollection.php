@@ -15,11 +15,13 @@ class ItemsCollection extends Collection implements ItemsCollectionContract
 	 */
     public function getTotalItemsPrice() : float
     {
-    	return array_reduce($this->items, function($v, $item) {
-            if($item->getUpdated() == 1){
-                return $v + $item->getLineItemPrice();
-            }    	    
-    	}, 0);
+        $total = 0;
+        foreach($this->items as $item){
+            if($item->getUpdated() != 1){
+                $total = $total + $item->getLineItemPrice();
+            }            
+        }
+    	return $total;
     }
 
     /**
