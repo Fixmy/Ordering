@@ -27,6 +27,7 @@ use Fixme\Ordering\Entities\Seller;
 use Fixme\Ordering\Entities\Values\Currency;
 use Fixme\Ordering\Entities\Values\Polymorph;
 use Fixme\Ordering\Entities\Values\Status;
+use Illuminate\Support\Facades\DB;
 
 class OrderRepository implements OrderRepositoryInterface
 {	
