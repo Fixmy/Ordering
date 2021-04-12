@@ -190,6 +190,8 @@ class OrderRepository implements OrderRepositoryInterface
      */
     public static function getOrders(\DateTime $from, \DateTime $to, string $countryCode = null, string $status = null): OrdersCollection 
     {	
+		$shops = DB::table('shops')->select('id')->get()->pluck('id');
+
     	$orders = OrderModel::with([
     		'buyer',
     		'seller',
@@ -203,6 +205,7 @@ class OrderRepository implements OrderRepositoryInterface
 		->when($countryCode, function ($query, $countryCode) {
 		              return $query->where('country_code', $countryCode);
 		})
+		->whereIn('seller_id', $shops)
     	->whereBetween('created_at', [$from, $to])
     	->get();
     	if($orders) {
